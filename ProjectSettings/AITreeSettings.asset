@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0d000dc8de3d304598f81e02a2d3274, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowNodeSnapping: 0
+  showMiniMap: 0
+  graphHotKeyAPI: 1
+  behaviourTreeUXML: {fileID: 9197481963319205126, guid: 6a906688e6d68544cb0d3ca4505d1f2b,
+    type: 3}
+  behaviourTreeUSS: {fileID: 7433441132597879392, guid: c90ee0d4a9481f84fb87328307d04bf2,
+    type: 3}
+  nodeUXML: {fileID: 9197481963319205126, guid: eb915e841316d9c4eb2f4849cb35df35,
+    type: 3}
+  nodeUSS: {fileID: 7433441132597879392, guid: 6c529d27fb86ff247b30a17f6d176079, type: 3}
+  decoratorUXML: {fileID: 9197481963319205126, guid: 12c8e35ede5852749b72dafcdd5739a0,
+    type: 3}
+  serviceUXML: {fileID: 9197481963319205126, guid: 74d2d8b0cca697a4383072f27aad19c9,
+    type: 3}
+  blackboardUXML: {fileID: 9197481963319205126, guid: 36aa87ebbae52f24392cdf449e8d21f4,
+    type: 3}
+  blackboardUSS: {fileID: 7433441132597879392, guid: fd8cdc3b326127d4d88a00e5c48fa278,
+    type: 3}
+  blackboardDetailsUXML: {fileID: 9197481963319205126, guid: f53d70067cd3dff4c92c589f5d9142f0,
+    type: 3}
+  blackboardDetailsUSS: {fileID: 7433441132597879392, guid: fb9203f28a4f8834fa983482b86b399c,
+    type: 3}
+  keyDetailsUXML: {fileID: 9197481963319205126, guid: 69fcb6335c7119e4d86f7cb76da5d96e,
+    type: 3}
+  keyDetailsUSS: {fileID: 7433441132597879392, guid: c2c4534c4d265bf4a89f008f2b7ca8bf,
+    type: 3}
+  advanced: 0
