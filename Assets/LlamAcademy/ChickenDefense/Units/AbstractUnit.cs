@@ -1,3 +1,4 @@
+using System;
 using LlamAcademy.ChickenDefense.EventBus;
 using LlamAcademy.ChickenDefense.Events;
 using UnityEngine;
@@ -9,6 +10,8 @@ namespace LlamAcademy.ChickenDefense.Units
     [RequireComponent(typeof(NavMeshAgent), typeof(Animator))]
     public abstract class AbstractUnit : MonoBehaviour, IDamageable, IMoveable, ISelectable
     {
+        public UnitSO Unit;
+        
         [SerializeField] protected DecalProjector SelectionDecal;
 
         public Transform Transform => transform;
@@ -27,7 +30,6 @@ namespace LlamAcademy.ChickenDefense.Units
         {
             Agent = GetComponent<NavMeshAgent>();
             Animator = GetComponent<Animator>();
-            CurrentHealth = MaxHealth;
         }
 
         public virtual void TakeDamage(float damage, AbstractUnit attackingUnit)
@@ -42,7 +44,14 @@ namespace LlamAcademy.ChickenDefense.Units
         
         protected virtual void OnEnable()
         {
+            SetupFromSO();
             Bus<UnitSpawnEvent>.Raise(new UnitSpawnEvent(this));
+        }
+
+        private void SetupFromSO()
+        {
+            MaxHealth = Unit.Health;
+            CurrentHealth = Unit.Health;
         }
 
         protected virtual void OnDisable()

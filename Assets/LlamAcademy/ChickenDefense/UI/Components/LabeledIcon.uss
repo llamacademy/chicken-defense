@@ -1,0 +1,4 @@
+.labeled-icon__icon {
+    height: 50px;
+    width: 50px;
+}

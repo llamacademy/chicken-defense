@@ -9,7 +9,6 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.FSM
 {
     public class MeleeAttackState : UnitStateBase<LlamaStates>
     {
-        private float AttackSpeed = 2f; // todo: move to SO
         private float LastAttackTime;
         private IDamageable Damageable;
         private readonly Action OnTargetDie;
@@ -37,7 +36,7 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.FSM
         {
             base.OnLogic();
 
-            if (Time.time > LastAttackTime + AttackSpeed)
+            if (Time.time > LastAttackTime + Unit.Unit.AttackConfig.AttackSpeed)
             {
                 LastAttackTime = Time.time;
                 
@@ -68,6 +67,9 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.FSM
         {
             Llama llama = Unit as Llama;
             Vector3 targetPosition = constraint.data.target.localPosition;
+            float normalAnimationSpeed = 1.4f; // 1 second for primary stomp, .4 seconds to return to normal
+            float speed = Mathf.Max(normalAnimationSpeed / Unit.Unit.AttackConfig.AttackSpeed, 1); // do not go below 1 speed
+            
             constraint.data.target.localPosition = targetPosition;
             float time = 0;
             while (time < 1)
@@ -79,11 +81,11 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.FSM
                     targetPosition.z
                 );
 
-                time += Time.deltaTime;
+                time += Time.deltaTime * speed;
 
                 if (time > 0.5f)
                 {
-                    Damageable.TakeDamage(10f, Unit);
+                    Damageable.TakeDamage(Unit.Unit.AttackConfig.Damage, Unit);
                 
                 }
                 yield return null;
@@ -93,7 +95,7 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.FSM
             constraint.data.targetPositionWeight = 0;
             while (time > 0)
             {
-                time -= Time.deltaTime * 2.5f;
+                time -= Time.deltaTime * 2.5f * speed;
                 constraint.data.targetPositionWeight = Mathf.Lerp(0, 1, time);
                 yield return null;
             }

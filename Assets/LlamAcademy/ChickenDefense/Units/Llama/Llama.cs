@@ -126,7 +126,7 @@ namespace LlamAcademy.ChickenDefense.Units.Llama
         private bool IsCloseEnoughToAttack(Transition<LlamaStates> _) =>
             TransformTarget != null &&
             Vector3.Distance(TransformTarget.GetComponent<Collider>().ClosestPoint(transform.position),
-                transform.position) <= 1f; // TODO: move to SO
+                transform.position) <= Unit.AttackConfig.AttackRadius;
 
         private bool IsNotCloseEnoughToAttack(Transition<LlamaStates> _) => !IsCloseEnoughToAttack(_);
     }
