@@ -1,4 +1,3 @@
-using System;
 using LlamAcademy.ChickenDefense.EventBus;
 using LlamAcademy.ChickenDefense.Events;
 using UnityEngine;

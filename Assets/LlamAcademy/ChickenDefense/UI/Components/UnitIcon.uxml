@@ -1,0 +1,4 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/LlamAcademy/ChickenDefense/UI/Components/UnitIcon.uss?fileID=7433441132597879392&amp;guid=e6eaf3fbc8d6484c9219bda4041e3dae&amp;type=3#UnitIcon" />
+    <ui:VisualElement name="icon" class="unit-icon" style="flex-grow: 1; justify-content: flex-end; align-items: center;" />
+</ui:UXML>

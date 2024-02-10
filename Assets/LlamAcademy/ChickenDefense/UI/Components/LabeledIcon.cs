@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -13,6 +14,8 @@ namespace LlamAcademy.ChickenDefense.UI.Components
 
         public LabeledIcon(Texture2D icon, string label)
         {
+            VisualTreeAsset asset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/LlamAcademy/ChickenDefense/UI/Components/LabeledIcon.uxml");
+            asset.CloneTree(this);
             Icon.style.backgroundImage = new StyleBackground(icon);
             Label.text = label;
         }
@@ -20,6 +23,11 @@ namespace LlamAcademy.ChickenDefense.UI.Components
         public void SetText(string label)
         {
             Label.text = label;
+        }
+
+        public void SetIcon(Texture2D icon)
+        {
+            Icon.style.backgroundImage = new StyleBackground(icon);
         }
     }
 }

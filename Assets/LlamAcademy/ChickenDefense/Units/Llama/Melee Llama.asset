@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: Melee Llama
   m_EditorClassIdentifier: 
   Health: 100
-  ResourceCost: 5
+  UIIcon: {fileID: 2800000, guid: 766cd946fbd4e3646962f12bacdcfad9, type: 3}
+  Prefab: {fileID: 8868147214974801904, guid: 63d422fab9a363747935958e76c2631d, type: 3}
+  PlacementGhostPrefab: {fileID: 19772663095076677, guid: 8f98caaac3403184cbb582f898a62cad,
+    type: 3}
+  ResourceCost: {fileID: 11400000, guid: cf0e5bf289579b845aac43ae50fc39d9, type: 2}
   NavMeshAgentConfig: {fileID: 11400000, guid: da914df0fe026b9419cf29e04fcca245, type: 2}
   AttackConfig: {fileID: 11400000, guid: c57208583dc1f774082fef6348c2fdc7, type: 2}

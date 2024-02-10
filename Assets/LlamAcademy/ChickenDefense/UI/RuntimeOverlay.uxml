@@ -1,11 +1,12 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:Template name="LabeledIcon" src="project://database/Assets/LlamAcademy/ChickenDefense/UI/Components/LabeledIcon.uxml?fileID=9197481963319205126&amp;guid=7ee8a7446ec63b844a8d89f25a7d9321&amp;type=3#LabeledIcon" />
+    <Style src="project://database/Assets/LlamAcademy/ChickenDefense/UI/RuntimeUI.uss?fileID=7433441132597879392&amp;guid=1ca2c3a5d041da047924425366e978ce&amp;type=3#RuntimeUI" />
     <ui:VisualElement name="runtime-ui" style="flex-grow: 1;">
-        <ui:VisualElement name="runtime-ui__header" style="max-height: 10%; align-items: flex-end; flex-direction: row; justify-content: flex-end;">
+        <ui:VisualElement name="runtime-ui__header" picking-mode="Ignore" style="max-height: 10%; align-items: flex-end; flex-direction: row; justify-content: flex-end;">
             <ui:Instance template="LabeledIcon" name="resource-container" />
             <ui:Instance template="LabeledIcon" name="population-container" />
         </ui:VisualElement>
-        <ui:VisualElement name="options__body" style="flex-grow: 1;" />
-        <ui:VisualElement name="options__footer" style="flex-grow: 1; justify-content: flex-end; max-height: 10%;" />
+        <ui:VisualElement name="runtime-ui__body" picking-mode="Ignore" style="flex-grow: 1;" />
+        <ui:VisualElement name="runtime-ui__footer" style="flex-grow: 1; justify-content: center; max-height: 10%; align-items: center;" />
     </ui:VisualElement>
 </ui:UXML>

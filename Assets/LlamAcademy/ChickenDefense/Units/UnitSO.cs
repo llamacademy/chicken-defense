@@ -6,7 +6,10 @@ namespace LlamAcademy.ChickenDefense.Units
     public class UnitSO : ScriptableObject
     {
         public float Health = 100;
-        public float ResourceCost = 5;
+        public Texture2D UIIcon;
+        public GameObject Prefab;
+        public GameObject PlacementGhostPrefab;
+        public ResourceCostSO ResourceCost;
         public NavMeshAgentConfigSO NavMeshAgentConfig;
         public AttackConfigSO AttackConfig;
     }

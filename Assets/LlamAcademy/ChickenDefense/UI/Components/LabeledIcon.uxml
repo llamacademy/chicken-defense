@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/LlamAcademy/ChickenDefense/UI/Components/LabeledIcon.uss?fileID=7433441132597879392&amp;guid=de3170a6de7c461c90c3ea89442a96b8&amp;type=3#LabeledIcon" />
-    <ui:VisualElement class="labeled-icon" style="flex-grow: 1; flex-direction: row;">
+    <ui:VisualElement name="root" class="labeled-icon" style="flex-grow: 1; flex-direction: row;">
         <ui:VisualElement name="icon" class="labeled-icon__icon" />
-        <ui:Label text="label&#x9;" class="labeled-icon__label" />
+        <ui:Label text="label&#x9;" name="label" class="labeled-icon__label" />
     </ui:VisualElement>
 </ui:UXML>

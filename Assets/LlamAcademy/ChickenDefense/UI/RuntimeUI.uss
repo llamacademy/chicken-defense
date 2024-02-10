@@ -1,0 +1,4 @@
+#runtime-ui__footer {
+    align-items: center;
+    justify-content: center;
+}

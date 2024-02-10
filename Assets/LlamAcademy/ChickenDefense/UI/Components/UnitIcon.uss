@@ -1,0 +1,21 @@
+.unit-icon {
+    height: 100px;
+    width: 100px;
+    border-color: #dddddd;
+    border-width: 3px;
+    border-radius: 2px;
+    background-color: #222222;
+    transition: background-color 0.1s ease-in, border-color 0.1s ease-in;
+}
+
+.unit-icon:disabled {
+    border-color: #999999;
+    background-color: #000000;
+    transition: background-color 0.1s ease-in, border-color 0.1s ease-in;
+}
+
+.unit-icon:hover, .unit-icon:active, .unit-icon:focus {
+    border-color: #ff6c00;
+    border-width: 3px;
+    transition: background-color 0.1s ease-out, border-color 0.1s ease-out;
+}

@@ -4,23 +4,28 @@ using LlamAcademy.ChickenDefense.EventBus;
 using LlamAcademy.ChickenDefense.Events;
 using LlamAcademy.ChickenDefense.Units;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 namespace LlamAcademy.ChickenDefense.Player
 {
     [RequireComponent(typeof(Camera))]
     public class PlayerController : MonoBehaviour
     {
-        [Header("Camera Configuration")] [SerializeField]
-        private CameraMoveConfig CameraConfig = new();
+        [Header("Camera Configuration")] 
+        [SerializeField] private CameraMoveConfig CameraConfig = new();
 
         [SerializeField] private Rigidbody VirtualCameraTarget;
         [SerializeField] private RectTransform SelectionBox;
         [SerializeField] private float MouseDragDelay = 0.1f;
 
-        [Header("Layers")] [SerializeField] private LayerMask SelectableLayers;
-        [SerializeField] private LayerMask CommandTargetLayers;
+        [Space]
+        [SerializeField] private UIDocument RuntimeUI;
 
+        [Header("Layers")] 
+        [SerializeField] private LayerMask SelectableLayers;
+        [SerializeField] private LayerMask CommandTargetLayers;
 
         private Camera Camera;
 
@@ -55,7 +60,7 @@ namespace LlamAcademy.ChickenDefense.Player
 
         private void OnUnitDeath(UnitDeathEvent @event)
         {
-            AliveUnits.Add(@event.Unit);
+            AliveUnits.Remove(@event.Unit);
             SelectedUnits.Remove(@event.Unit);
         }
 
@@ -64,73 +69,33 @@ namespace LlamAcademy.ChickenDefense.Player
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             Ray cameraRay = Camera.ScreenPointToRay(mousePosition);
 
-            HandlePanning(mousePosition);
             HandleDragSelect(cameraRay, mousePosition);
-            HandleIssuingCommands(cameraRay, mousePosition);
+            CameraConfig.HandlePanning(mousePosition, VirtualCameraTarget);
+            HandleIssuingCommands(cameraRay, mousePosition);                
         }
 
-        private void HandlePanning(Vector2 mousePosition)
+        private bool IsMouseWithinSafeZone(Vector2 mousePosition)
         {
-            if (!CameraConfig.EnableEdgePan)
-            {
-                return;
-            }
-
-            Vector2 moveAmount = Vector2.zero;
-            if (mousePosition.x < CameraConfig.EdgePanWidth)
-            {
-                moveAmount.x = -CameraConfig.MousePanSpeed;
-            }
-            else if (mousePosition.x > Screen.width - CameraConfig.EdgePanWidth)
-            {
-                moveAmount.x = +CameraConfig.MousePanSpeed;
-            }
-
-            if (mousePosition.y < CameraConfig.EdgePanWidth)
-            {
-                moveAmount.y = -CameraConfig.MousePanSpeed;
-            }
-            else if (mousePosition.y > Screen.height - CameraConfig.EdgePanWidth)
-            {
-                moveAmount.y = +CameraConfig.MousePanSpeed;
-            }
-
-            if (Keyboard.current.upArrowKey.isPressed)
-            {
-                moveAmount.y += CameraConfig.KeyboardPanSpeed;
-            }
-
-            if (Keyboard.current.downArrowKey.isPressed)
-            {
-                moveAmount.y -= CameraConfig.KeyboardPanSpeed;
-            }
-
-            if (Keyboard.current.leftArrowKey.isPressed)
-            {
-                moveAmount.x -= CameraConfig.KeyboardPanSpeed;
-            }
-
-            if (Keyboard.current.rightArrowKey.isPressed)
-            {
-                moveAmount.x += CameraConfig.KeyboardPanSpeed;
-            }
-
-            VirtualCameraTarget.velocity = new Vector3(moveAmount.x, 0, moveAmount.y);
+            return mousePosition.y < Screen.height * CameraConfig.BottomSafePercentage;
         }
-
-
+        
         private void HandleDragSelect(Ray cameraRay, Vector2 mousePosition)
         {
-            if (Mouse.current.leftButton.wasPressedThisFrame)
+            bool mouseIsInSafeZone = IsMouseWithinSafeZone(mousePosition);
+            if (Mouse.current.leftButton.wasPressedThisFrame && !mouseIsInSafeZone)
             {
                 SelectionBox.gameObject.SetActive(true);
                 StartMousePosition = mousePosition;
                 MouseDownTime = Time.time;
                 SelectionBox.sizeDelta = Vector2.zero;
             }
-            else if (Mouse.current.leftButton.isPressed)
+            else if (Mouse.current.leftButton.isPressed && !Mouse.current.leftButton.wasPressedThisFrame)
             {
                 Bounds selectionBoxBounds = ResizeSelectionBox(mousePosition);
+                if (Mouse.current.delta.magnitude < 1)
+                {
+                    return;
+                }
                 foreach (AbstractUnit availableUnit in AliveUnits)
                 {
                     Vector2 unitPosition = Camera.WorldToScreenPoint(availableUnit.transform.position);
@@ -154,11 +119,11 @@ namespace LlamAcademy.ChickenDefense.Player
             else if (Mouse.current.leftButton.wasReleasedThisFrame)
             {
                 SelectionBox.gameObject.SetActive(false);
-                if (MouseDownTime + MouseDragDelay > Time.time || AddedUnits.Count == 0)
+                if (MouseDownTime + MouseDragDelay > Time.time || AddedUnits.Count == 0 && !mouseIsInSafeZone)
                 {
                     HandleLeftClick(cameraRay);
                 }
-                else
+                else 
                 {
                     foreach (AbstractUnit unit in AddedUnits)
                     {
@@ -171,8 +136,6 @@ namespace LlamAcademy.ChickenDefense.Player
                         AddedUnits.Clear();
                     }
 
-                    
-                    DeselectAllUnits(RemovedUnits);
                     foreach (AbstractUnit unit in RemovedUnits)
                     {
                         SelectedUnits.Remove(unit);
@@ -231,16 +194,6 @@ namespace LlamAcademy.ChickenDefense.Player
             SelectionBox.sizeDelta = new Vector2(Mathf.Abs(width), Mathf.Abs(height));
 
             return new Bounds(SelectionBox.anchoredPosition, SelectionBox.sizeDelta);
-        }
-
-        private void ClearSelectedUnits()
-        {
-            foreach (AbstractUnit unit in SelectedUnits)
-            {
-                ((ISelectable)unit).Deselect();
-            }
-
-            SelectedUnits.Clear();
         }
 
         private void HandleIssuingCommands(Ray cameraRay, Vector2 mousePosition)
