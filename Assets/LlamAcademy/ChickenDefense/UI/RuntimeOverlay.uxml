@@ -7,6 +7,6 @@
             <ui:Instance template="LabeledIcon" name="population-container" />
         </ui:VisualElement>
         <ui:VisualElement name="runtime-ui__body" picking-mode="Ignore" style="flex-grow: 1;" />
-        <ui:VisualElement name="runtime-ui__footer" style="flex-grow: 1; justify-content: center; max-height: 10%; align-items: center;" />
+        <ui:VisualElement name="runtime-ui__footer" style="flex-grow: 1; justify-content: center; max-height: 10%; align-items: center; flex-direction: row;" />
     </ui:VisualElement>
 </ui:UXML>

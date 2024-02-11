@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57f2f717068346fbaf05a21b62f88c69, type: 3}
+  m_Name: Spitting Llama
+  m_EditorClassIdentifier: 
+  Health: 100
+  UIIcon: {fileID: 2800000, guid: 605d09e808288184583932c1fb5dc3ec, type: 3}
+  Prefab: {fileID: 8868147214974801904, guid: 927ea54006e64c74e88d4c93c686afe2, type: 3}
+  PlacementGhostPrefab: {fileID: 19772663095076677, guid: 8f98caaac3403184cbb582f898a62cad,
+    type: 3}
+  ResourceCost: {fileID: 11400000, guid: a5b91cfee84258744ae80a5fe7265180, type: 2}
+  NavMeshAgentConfig: {fileID: 11400000, guid: da914df0fe026b9419cf29e04fcca245, type: 2}
+  AttackConfig: {fileID: 11400000, guid: 80ba0dd0a0facf442bc1dd02084a5ca0, type: 2}

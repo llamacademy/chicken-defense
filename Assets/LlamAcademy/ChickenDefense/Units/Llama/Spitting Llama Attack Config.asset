@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d49329c1f16041df81160b312b31752d, type: 3}
+  m_Name: Spitting Llama Attack Config
+  m_EditorClassIdentifier: 
+  AttackSpeed: 1.25
+  AttackRadius: 7
+  AttackableLayers:
+    serializedVersion: 2
+    m_Bits: 512
+  Damage: 15
+  IsRanged: 1
+  RangedPrefab: {fileID: 1033437230666771793, guid: c07fdb54d53f5224a9c08896976a7baf,
+    type: 3}

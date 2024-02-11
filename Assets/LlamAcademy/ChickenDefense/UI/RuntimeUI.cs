@@ -57,12 +57,12 @@ namespace LlamAcademy.ChickenDefense.UI
 
         private void OnSpawnUnit(UnitSpawnEvent @event)
         {
-           
+           // subtract resources?
         }
         
         private void OnUnitDeath(UnitDeathEvent @event)
         {
-            
+            // do we need that?
         }
         
     }

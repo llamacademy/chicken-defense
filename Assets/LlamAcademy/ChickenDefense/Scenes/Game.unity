@@ -3119,6 +3119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f577333c767446e84a41f507ea5b529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Collider: {fileID: 0}
 --- !u!1 &1761105108
 GameObject:
   m_ObjectHideFlags: 0
@@ -3434,6 +3435,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f577333c767446e84a41f507ea5b529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Collider: {fileID: 0}
 --- !u!135 &1799731013
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -3830,11 +3832,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c589b91203bf4ae790af665990edb5f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InputHandlers:
-  - InputTarget: 0
-    Handler: {fileID: 1895156706}
-  - InputTarget: 1
-    Handler: {fileID: 1895156707}
+  InputHandlers: []
   DefaultTarget: 0
 --- !u!1 &1917502153
 GameObject:
@@ -5053,6 +5051,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BuildableUnits:
   - {fileID: 11400000, guid: 42e2a23a09ebc9d48932187eae8f7579, type: 2}
+  - {fileID: 11400000, guid: 2b3a478ac65cef24d960f2a2f4521e3a, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

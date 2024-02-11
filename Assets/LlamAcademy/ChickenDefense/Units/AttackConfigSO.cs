@@ -7,7 +7,7 @@ namespace LlamAcademy.ChickenDefense.Units
     {
         public float AttackSpeed = 2f;
         public float AttackRadius = 3f;
-        public LayerMask AttackableLayers;
+        public float SensorRadius = 5f;
         public float Damage = 10;
         
         [Space]

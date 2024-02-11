@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using LlamAcademy.ChickenDefense.Units.FSM.Common;
 using LlamAcademy.ChickenDefense.Units.FSM.Sensors;
+using LlamAcademy.ChickenDefense.Units.Llama.Behaviors;
 using LlamAcademy.ChickenDefense.Units.Llama.FSM;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Animations.Rigging;
+using UnityEngine.Pool;
 using UnityHFSM;
 
 namespace LlamAcademy.ChickenDefense.Units.Llama
@@ -16,12 +18,14 @@ namespace LlamAcademy.ChickenDefense.Units.Llama
         [Space] [SerializeField] private TargetSensor EnemySensor;
         [SerializeField] private TwoBoneIKConstraint LeftLegConstraint;
         [SerializeField] private TwoBoneIKConstraint RightLegConstraint;
+        [SerializeField] private Transform SpitSpawnLocation;
 
         private List<IDamageable> NearbyEnemmies = new();
 
         [field: SerializeField] public AnimationCurve StompHeightCurve { get; private set; }
         private HybridStateMachine<LlamaStates, StateEvent> AttackStateMachine;
-
+        private ObjectPool<Spit> SpitPool;
+        
         protected override void Awake()
         {
             Agent = GetComponent<NavMeshAgent>();
@@ -34,8 +38,13 @@ namespace LlamAcademy.ChickenDefense.Units.Llama
 
         private void Start()
         {
+            EnemySensor.Collider.radius = Unit.AttackConfig.SensorRadius;
             EnemySensor.OnTargetEnter += OnTargetEnterRadius;
             EnemySensor.OnTargetExit += OnTargetExitRadius;
+            if (Unit.AttackConfig.IsRanged)
+            {
+                SpitPool = new ObjectPool<Spit>(CreateSpitObject);
+            }
         }
 
         protected override void Update()
@@ -46,8 +55,17 @@ namespace LlamAcademy.ChickenDefense.Units.Llama
 
         private void AddAttackStates()
         {
-            AttackStateMachine.AddState(LlamaStates.Attack,
-                new MeleeAttackState(this, OnTargetDie, LeftLegConstraint, RightLegConstraint));
+            if (Unit.AttackConfig.IsRanged)
+            {
+                AttackStateMachine.AddState(LlamaStates.Attack,
+                    new RangedAttackState(this));
+            }
+            else
+            {
+                AttackStateMachine.AddState(LlamaStates.Attack,
+                    new MeleeAttackState(this, OnTargetDie, LeftLegConstraint, RightLegConstraint));                
+            }
+            
             AttackStateMachine.AddState(LlamaStates.Move, new MoveState<LlamaStates>(this));
         }
 
@@ -118,6 +136,24 @@ namespace LlamAcademy.ChickenDefense.Units.Llama
         private void OnTargetExitRadius(Transform target)
         {
             OnTargetDie();
+        }
+
+        /// <summary>
+        /// Animation Event
+        /// </summary>
+        /// <param name="_"></param>
+        private void SpawnSpit(int _)
+        {
+            Spit instance = SpitPool.Get();
+
+            instance.Spawn(this, OnTargetDie, SpitSpawnLocation);
+        }
+
+        private Spit CreateSpitObject()
+        {
+            GameObject instance = Instantiate(Unit.AttackConfig.RangedPrefab);
+            instance.gameObject.SetActive(false); // prevent auto spawning particles
+            return instance.GetComponent<Spit>();
         }
 
         private bool IsCloseToTarget(Transition<LlamaStates> _) =>
