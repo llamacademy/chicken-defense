@@ -17,7 +17,7 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.FSM
         private readonly TwoBoneIKConstraint LeftLegConstraint;
         private readonly TwoBoneIKConstraint RightLegConstraint;
 
-        public MeleeAttackState(Llama unit, Action onTargetDie, TwoBoneIKConstraint leftLegConstraint, TwoBoneIKConstraint rightLegConstraint) : base(unit)
+        public MeleeAttackState(Behaviors.Llama unit, Action onTargetDie, TwoBoneIKConstraint leftLegConstraint, TwoBoneIKConstraint rightLegConstraint) : base(unit)
         {
             OnTargetDie = onTargetDie;
             LeftLegConstraint = leftLegConstraint;
@@ -65,7 +65,7 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.FSM
 
         private IEnumerator PlayStompAnimation(TwoBoneIKConstraint constraint)
         {
-            Llama llama = Unit as Llama;
+            Behaviors.Llama llama = Unit as Behaviors.Llama;
             Vector3 targetPosition = constraint.data.target.localPosition;
             float normalAnimationSpeed = 1.4f; // 1 second for primary stomp, .4 seconds to return to normal
             float speed = Mathf.Max(normalAnimationSpeed / Unit.Unit.AttackConfig.AttackSpeed, 1); // do not go below 1 speed

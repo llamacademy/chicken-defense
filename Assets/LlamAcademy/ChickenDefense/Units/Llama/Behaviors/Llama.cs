@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using LlamAcademy.ChickenDefense.Units.FSM.Common;
 using LlamAcademy.ChickenDefense.Units.FSM.Sensors;
-using LlamAcademy.ChickenDefense.Units.Llama.Behaviors;
 using LlamAcademy.ChickenDefense.Units.Llama.FSM;
 using UnityEngine;
 using UnityEngine.AI;
@@ -9,7 +8,7 @@ using UnityEngine.Animations.Rigging;
 using UnityEngine.Pool;
 using UnityHFSM;
 
-namespace LlamAcademy.ChickenDefense.Units.Llama
+namespace LlamAcademy.ChickenDefense.Units.Llama.Behaviors
 {
     public class Llama : UnitBase<LlamaStates>
     {

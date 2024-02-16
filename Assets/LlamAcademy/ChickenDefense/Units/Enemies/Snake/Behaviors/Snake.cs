@@ -4,10 +4,12 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityHFSM;
 
-namespace LlamAcademy.ChickenDefense.Units.Enemies.Snake
+namespace LlamAcademy.ChickenDefense.Units.Enemies.Snake.Behaviors
 {
     public class Snake : EnemyBase
     {
+        [SerializeField] private SnakeSplineAnimator SplineAnimator;
+        // TODO: remove
         [SerializeField] private Transform DebugStartTarget;
 
         protected override void Awake()
@@ -23,16 +25,17 @@ namespace LlamAcademy.ChickenDefense.Units.Enemies.Snake
         
         protected override void AddStates()
         {
-            FSM.AddState(EnemyStates.Idle, new IdleState<EnemyStates>(this));
+            FSM.AddState(EnemyStates.Idle,new IdleState<EnemyStates>(this));
             FSM.AddState(EnemyStates.Move, new EnemyMoveState(this));
 
             FSM.SetStartState(EnemyStates.Idle);
         }
 
         protected override void AddTransitions()
-        { 
-            FSM.AddTriggerTransitionFromAny(StateEvent.MoveIssued, EnemyStates.Move);
-            FSM.AddTriggerTransitionFromAny(StateEvent.StopIssued, EnemyStates.Idle);
+        {
+            FSM.AddTriggerTransitionFromAny(StateEvent.MoveIssued, EnemyStates.Move, null,
+                (_) => SplineAnimator.enabled = true);
+            FSM.AddTriggerTransitionFromAny(StateEvent.StopIssued, EnemyStates.Idle, (_) => SplineAnimator.enabled = true);
 
             FSM.AddTransition(new Transition<EnemyStates>(EnemyStates.Move, EnemyStates.Idle, IsCloseToTarget));
         }
