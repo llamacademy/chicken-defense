@@ -29,6 +29,10 @@ namespace LlamAcademy.ChickenDefense.Units
         {
             Agent = GetComponent<NavMeshAgent>();
             Animator = GetComponent<Animator>();
+            if (Unit.NavMeshAgentConfig != null)
+            {
+                Unit.NavMeshAgentConfig.SetupNavMeshAgent(Agent);
+            }
         }
 
         public virtual void TakeDamage(float damage, AbstractUnit attackingUnit)

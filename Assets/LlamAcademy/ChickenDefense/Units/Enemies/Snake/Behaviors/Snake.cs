@@ -1,3 +1,4 @@
+using LlamAcademy.ChickenDefense.Units.Chicken.Behaviors;
 using LlamAcademy.ChickenDefense.Units.Enemies.FSM.Common;
 using LlamAcademy.ChickenDefense.Units.FSM.Common;
 using UnityEngine;
@@ -9,25 +10,28 @@ namespace LlamAcademy.ChickenDefense.Units.Enemies.Snake.Behaviors
     public class Snake : EnemyBase
     {
         [SerializeField] private SnakeSplineAnimator SplineAnimator;
-        // TODO: remove
-        [SerializeField] private Transform DebugStartTarget;
-
-        protected override void Awake()
+        private bool IsWandering = true;
+        private Egg TargetEgg;
+        
+        public void GoToEgg(Egg egg)
         {
-            base.Awake();
-            TransformTarget = DebugStartTarget; // TODO: remove to let AI brain set it
+            TransformTarget = egg.transform;
+            FSM.Trigger(StateEvent.MoveIssued);
+            IsWandering = false;
         }
 
-        private void Start()
+        public void Wander()
         {
+            IsWandering = true;
+            TransformTarget = null;
+            Target = PickNearbyWanderPosition();
             FSM.Trigger(StateEvent.MoveIssued);
         }
         
         protected override void AddStates()
         {
-            FSM.AddState(EnemyStates.Idle,new IdleState<EnemyStates>(this));
+            FSM.AddState(EnemyStates.Idle, new IdleState<EnemyStates>(this));
             FSM.AddState(EnemyStates.Move, new EnemyMoveState(this));
-
             FSM.SetStartState(EnemyStates.Idle);
         }
 
@@ -35,9 +39,19 @@ namespace LlamAcademy.ChickenDefense.Units.Enemies.Snake.Behaviors
         {
             FSM.AddTriggerTransitionFromAny(StateEvent.MoveIssued, EnemyStates.Move, null,
                 (_) => SplineAnimator.enabled = true);
-            FSM.AddTriggerTransitionFromAny(StateEvent.StopIssued, EnemyStates.Idle, (_) => SplineAnimator.enabled = true);
+            FSM.AddTriggerTransitionFromAny(StateEvent.StopIssued, EnemyStates.Idle,
+                (_) => SplineAnimator.enabled = false);
 
-            FSM.AddTransition(new Transition<EnemyStates>(EnemyStates.Move, EnemyStates.Idle, IsCloseToTarget));
+            FSM.AddTransition(new Transition<EnemyStates>(EnemyStates.Move, EnemyStates.Move, ShouldPickNewWanderLocation, (_) => SplineAnimator.enabled = true));
+            // died
+            FSM.AddTransition(new Transition<EnemyStates>(EnemyStates.Move, EnemyStates.Idle, ShouldTransitionToIdle, (_) =>
+            {
+                gameObject.SetActive(false);
+                if (TransformTarget != null && TransformTarget.TryGetComponent(out Egg _))
+                {
+                    TransformTarget.gameObject.SetActive(false);
+                }
+            }));
         }
 
         protected override void HandleLlamaEnter(Transform target)
@@ -57,15 +71,26 @@ namespace LlamAcademy.ChickenDefense.Units.Enemies.Snake.Behaviors
 
         protected override void HandleFoodEnter(Transform target)
         {
-            NearbyFood.Add(target.GetComponent<NavMeshAgent>());
         }
 
         protected override void HandleFoodExit(Transform target)
         {
-            NearbyFood.Remove(target.GetComponent<NavMeshAgent>());
         }
-        
+
         private bool IsCloseToTarget(Transition<EnemyStates> _) =>
             Agent.enabled && Agent.remainingDistance <= Agent.stoppingDistance;
+
+        private bool ShouldTransitionToIdle(Transition<EnemyStates> _) => !IsWandering && IsCloseToTarget(_);
+        private bool ShouldPickNewWanderLocation(Transition<EnemyStates> _) => IsWandering && IsCloseToTarget(_);
+        
+        private Vector3 PickNearbyWanderPosition()
+        {
+            Vector2 randomPosition = Random.insideUnitCircle * 3f; 
+            return transform.position + new Vector3(
+                randomPosition.x,
+                0,
+                randomPosition.y
+            );
+        }
     }
 }

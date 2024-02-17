@@ -12,7 +12,7 @@ namespace LlamAcademy.ChickenDefense.Units.Enemies
         [SerializeField] private TargetSensor LlamaSensor;
         [SerializeField] private TargetSensor FoodSensor;
         public List<NavMeshAgent> NearbyLlamas = new();
-        public List<NavMeshAgent> NearbyFood = new();
+        public List<Transform> NearbyFood = new();
         public Vector2 RunCompletelyAwayDistance = new(5,2); // TODO: move to SO
         
         protected override void OnEnable()

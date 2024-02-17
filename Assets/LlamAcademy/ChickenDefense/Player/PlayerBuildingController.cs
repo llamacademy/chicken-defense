@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using LlamAcademy.ChickenDefense.EventBus;
 using LlamAcademy.ChickenDefense.Events;
 using LlamAcademy.ChickenDefense.Units;
+using LlamAcademy.ChickenDefense.Units.Chicken.Behaviors;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -20,12 +22,20 @@ namespace LlamAcademy.ChickenDefense.Player
         private UnitSO ActiveUnit;
 
         private EventBinding<UnitSelectedToPlaceEvent> UnitSelectedEventBinding;
+        private EventBinding<EggSpawnEvent> EggSpawnEventBinding;
+        private EventBinding<EggRemovedEvent> EggRemovedEventBinding;
+        private List<Egg> Eggs = new();
 
         private void Awake()
         {
             Camera = GetComponent<Camera>();
             UnitSelectedEventBinding = new EventBinding<UnitSelectedToPlaceEvent>(HandleUnitSelected);
             Bus<UnitSelectedToPlaceEvent>.Register(UnitSelectedEventBinding);
+
+            EggSpawnEventBinding = new EventBinding<EggSpawnEvent>(HandleEggSpawn);
+            EggRemovedEventBinding = new EventBinding<EggRemovedEvent>(HandleEggRemoved);
+            Bus<EggSpawnEvent>.Register(EggSpawnEventBinding);
+            Bus<EggRemovedEvent>.Register(EggRemovedEventBinding);
         }
 
         private void Update()
@@ -46,6 +56,10 @@ namespace LlamAcademy.ChickenDefense.Player
                 if (Mouse.current.leftButton.wasReleasedThisFrame)
                 {
                     Instantiate(ActiveUnit.Prefab, PlacementGhost.transform.position, PlacementGhost.transform.rotation);
+                    for (int i = 0; i < ActiveUnit.ResourceCost.Cost; i++)
+                    {
+                        Eggs[0].gameObject.SetActive(false);
+                    }
                     Destroy(PlacementGhost);
                     ActiveUnit = null;
                     Bus<InputModeChangedEvent>.Raise(new InputModeChangedEvent(ActiveInputTarget.Units));
@@ -71,6 +85,19 @@ namespace LlamAcademy.ChickenDefense.Player
                 
             PlacementGhost = Instantiate(@event.Unit.PlacementGhostPrefab, spawnLocation, quaternion.Euler(0, Random.Range(0, 359), 0));
             ActiveUnit = @event.Unit;
+        }
+
+        private void HandleEggSpawn(EggSpawnEvent @event)
+        {
+            Eggs.Add(@event.Egg);
+        }
+
+        private void HandleEggRemoved(EggRemovedEvent @event)
+        {
+            foreach (Egg egg in @event.Eggs)
+            {
+                Eggs.Remove(egg);
+            }
         }
     }
 }

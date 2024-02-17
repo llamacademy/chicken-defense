@@ -4,6 +4,7 @@ namespace LlamAcademy.ChickenDefense.Units.Enemies
     {
         Idle,
         Move,
-        Attack
+        Attack,
+        Die
     }
 }

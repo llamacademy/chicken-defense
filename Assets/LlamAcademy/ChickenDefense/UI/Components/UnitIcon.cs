@@ -1,8 +1,6 @@
 using LlamAcademy.ChickenDefense.Units;
 using UnityEditor;
-using UnityEngine.Rendering.UI;
 using UnityEngine.UIElements;
-using Label = System.Reflection.Emit.Label;
 
 namespace LlamAcademy.ChickenDefense.UI.Components
 {

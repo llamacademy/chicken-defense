@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 256a82ceba6446218b4b6b5279e9f446, type: 3}
   m_Name: Snake NavMeshAgent Config
   m_EditorClassIdentifier: 
-  AgentTypeId: 0
+  AgentTypeId: 1479372276
   BaseOffset: 0.5
   Speed: 1.5
   AngularSpeed: 120
   Acceleration: 8
   StoppingDistance: 0.5
-  Radius: 0.5
+  Radius: 0.1
   Height: 1
   ObstacleAvoidanceType: 4
-  AvoidancePriority: 50
+  AvoidancePriority: 5

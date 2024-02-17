@@ -9,6 +9,7 @@ using UnityEngine.UIElements;
 
 namespace LlamAcademy.ChickenDefense.Player
 {
+    [DefaultExecutionOrder(1)]
     [RequireComponent(typeof(Camera))]
     public class PlayerController : MonoBehaviour
     {

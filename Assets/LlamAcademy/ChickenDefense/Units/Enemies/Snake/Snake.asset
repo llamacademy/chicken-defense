@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: Snake
   m_EditorClassIdentifier: 
   Health: 100
-  ResourceCost: 5
-  NavMeshAgentConfig: {fileID: 0}
+  UIIcon: {fileID: 0}
+  Prefab: {fileID: 8821808129739119308, guid: 900a3894a97585e4dbe416552aaee14c, type: 3}
+  PlacementGhostPrefab: {fileID: 0}
+  ResourceCost: {fileID: 0}
+  NavMeshAgentConfig: {fileID: 11400000, guid: 7dc4a77d613044e4c834cad183e56465, type: 2}
   AttackConfig: {fileID: 0}

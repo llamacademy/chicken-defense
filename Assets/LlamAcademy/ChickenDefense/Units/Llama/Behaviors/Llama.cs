@@ -19,7 +19,7 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.Behaviors
         [SerializeField] private TwoBoneIKConstraint RightLegConstraint;
         [SerializeField] private Transform SpitSpawnLocation;
 
-        private List<IDamageable> NearbyEnemmies = new();
+        private List<IDamageable> NearbyEnemies = new();
 
         [field: SerializeField] public AnimationCurve StompHeightCurve { get; private set; }
         private HybridStateMachine<LlamaStates, StateEvent> AttackStateMachine;
@@ -104,10 +104,10 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.Behaviors
 
         private void OnTargetDie()
         {
-            NearbyEnemmies.Remove(TransformTarget.GetComponent<IDamageable>());
-            if (NearbyEnemmies.Count != 0)
+            NearbyEnemies.Remove(TransformTarget.GetComponent<IDamageable>());
+            if (NearbyEnemies.Count != 0)
             {
-                TransformTarget = NearbyEnemmies[0].Transform;
+                TransformTarget = NearbyEnemies[0].Transform;
             }
             else
             {
@@ -121,14 +121,14 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.Behaviors
         {
             if (target.TryGetComponent(out IDamageable damageable))
             {
-                NearbyEnemmies.Add(damageable);
+                NearbyEnemies.Add(damageable);
                 // TODO: is this the right way? I can't ever remember
-                NearbyEnemmies.Sort((a, b) => Mathf.FloorToInt(
+                NearbyEnemies.Sort((a, b) => Mathf.FloorToInt(
                     Vector3.SqrMagnitude(b.Transform.position - transform.position) -
                     Vector3.SqrMagnitude(a.Transform.position - transform.position)));
             }
 
-            TransformTarget = NearbyEnemmies[0].Transform;
+            TransformTarget = NearbyEnemies[0].Transform;
             FSM.Trigger(StateEvent.AttackIssued);
         }
 
