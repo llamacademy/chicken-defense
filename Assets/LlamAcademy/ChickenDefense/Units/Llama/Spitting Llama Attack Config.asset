@@ -14,10 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttackSpeed: 1.25
   AttackRadius: 7
-  AttackableLayers:
-    serializedVersion: 2
-    m_Bits: 512
-  Damage: 15
+  SensorRadius: 5
+  Damage: 50
   IsRanged: 1
   RangedPrefab: {fileID: 1033437230666771793, guid: c07fdb54d53f5224a9c08896976a7baf,
     type: 3}

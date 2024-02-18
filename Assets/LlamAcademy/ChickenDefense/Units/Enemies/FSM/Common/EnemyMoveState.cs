@@ -64,8 +64,8 @@ namespace LlamAcademy.ChickenDefense.Units.Enemies.FSM.Common
              
             Enemy.Agent.velocity = Vector3.Lerp(
                 Enemy.Agent.desiredVelocity,
-                -directionToClosestLlama.normalized * Enemy.Agent.speed,
-                Mathf.Clamp01((Enemy.RunCompletelyAwayDistance.x - directionToClosestLlama.magnitude) / Enemy.RunCompletelyAwayDistance.y)
+                -directionToClosestLlama.normalized * Enemy.Agent.speed * Enemy.Unit.RunAwayConfig.SpeedMultiplier,
+                Mathf.Clamp01((Enemy.Unit.RunAwayConfig.RunCompletelyAwayDistance.x - directionToClosestLlama.magnitude) / Enemy.Unit.RunAwayConfig.RunCompletelyAwayDistance.y)
             );
         }
     }

@@ -105,10 +105,7 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.Behaviors
 
         private void OnTargetDie()
         {
-            if (TransformTarget != null)
-            {
-                NearbyEnemies.Remove(TransformTarget.GetComponent<IDamageable>());
-            }
+            NearbyEnemies.RemoveAll(item => !item.Transform.gameObject.activeSelf);
 
             if (NearbyEnemies.Count != 0)
             {
@@ -140,6 +137,10 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.Behaviors
 
         private void OnTargetExitRadius(Transform target)
         {
+            if (target.TryGetComponent(out IDamageable damageable) && NearbyEnemies.Contains(damageable))
+            {
+                NearbyEnemies.Remove(damageable);
+            }
             OnTargetDie();
         }
 

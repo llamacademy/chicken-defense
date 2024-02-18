@@ -5,7 +5,9 @@ using LlamAcademy.ChickenDefense.EventBus;
 using LlamAcademy.ChickenDefense.Events;
 using LlamAcademy.ChickenDefense.Units;
 using LlamAcademy.ChickenDefense.Units.Chicken.Behaviors;
+using LlamAcademy.ChickenDefense.Units.Enemies;
 using LlamAcademy.ChickenDefense.Units.Enemies.Snake.Behaviors;
+using LlamAcademy.ChickenDefense.Units.Fox;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
@@ -17,6 +19,7 @@ namespace LlamAcademy.ChickenDefense.AI
     public class AttackerBrain : MonoBehaviour
     {
         [SerializeField] private NavMeshSurface SnakeSurface;
+        [SerializeField] private NavMeshSurface FoxSurface;
         [SerializeField] [Range(1, 5)] private int DifficultyFactor = 2;
         [SerializeField] private UnitSO Snake;
         [SerializeField] private UnitSO Fox;
@@ -28,8 +31,12 @@ namespace LlamAcademy.ChickenDefense.AI
         private EventBinding<UnitDeathEvent> UnitDeathBinding;
 
         private List<Snake> AliveSnakes = new();
+        private List<Fox> AliveFoxes = new();
         private List<Egg> AliveEggs = new();
+        private List<Chicken> AliveChickens = new();
+        
         private ObjectPool<Snake> SnakePool;
+        private ObjectPool<Fox> FoxPool;
 
         private void Awake()
         {
@@ -44,83 +51,74 @@ namespace LlamAcademy.ChickenDefense.AI
             Bus<UnitDeathEvent>.Register(UnitDeathBinding);
 
             SnakePool = new ObjectPool<Snake>(() => Instantiate(Snake.Prefab).GetComponent<Snake>());
+            FoxPool = new ObjectPool<Fox>(() => Instantiate(Fox.Prefab).GetComponent<Fox>());
         }
 
         private void Start()
         {
-            Bounds spawnableBounds = SnakeSurface.navMeshData.sourceBounds;
-            StartCoroutine(SpawnEnemies(spawnableBounds));
+            Bounds snakeSpawnBounds = SnakeSurface.navMeshData.sourceBounds;
+            Bounds foxSpawnBounds = FoxSurface.navMeshData.sourceBounds;
+            StartCoroutine(SpawnSnakes(snakeSpawnBounds));
+            StartCoroutine(SpawnFoxes(foxSpawnBounds));
         }
 
-        private IEnumerator SpawnEnemies(Bounds spawnBounds)
+        private IEnumerator SpawnSnakes(Bounds spawnBounds)
         {
-            WaitForSeconds snakeBurstSpawnWait = new(15f);
+            WaitForSeconds wait = new(11);
             int iteration = 1;
             while (enabled)
             {
-                // TODO: maybe more complex spawning logic
-                SpawnSnakes(spawnBounds, iteration);
-                yield return snakeBurstSpawnWait;
-                iteration++;
-            }
-        }
-
-        private void SpawnSnakes(Bounds spawnBounds, int iteration)
-        {
-            for (int i = 0; i < iteration; i++)
-            {
-                Snake snake = SnakePool.Get();
-
-                Vector3 spawnLocation;
-                if (Random.value < 0.25f)
+                foreach (Snake snake in SpawnEnemy(SnakePool, spawnBounds, iteration))
                 {
-                    // pick location on min x, random z 
-                    spawnLocation = new Vector3(
-                        spawnBounds.min.x,
-                        0,
-                        Random.Range(spawnBounds.min.z, spawnBounds.max.z)
-                    );
-                }
-                else if (Random.value < 0.5f)
-                {
-                    // pick location on min z, random x
-                    spawnLocation = new Vector3(
-                        Random.Range(spawnBounds.min.x, spawnBounds.max.x),
-                        0,
-                        spawnBounds.min.z
-                    );
-                }
-                else if (Random.value < 0.75f)
-                {
-                    // pick location on max x, random z
-                    spawnLocation = new Vector3(
-                        spawnBounds.max.x,
-                        0,
-                        Random.Range(spawnBounds.min.z, spawnBounds.max.z)
-                    );
-                }
-                else
-                {
-                    // pick location on max z, random x
-                    spawnLocation = new Vector3(
-                        Random.Range(spawnBounds.min.x, spawnBounds.max.x),
-                        0,
-                        spawnBounds.max.z
-                    );
-                }
-
-                if (NavMesh.SamplePosition(spawnLocation, out NavMeshHit hit, 1, snake.Agent.areaMask))
-                {
-                    snake.transform.position = hit.position;
-                    snake.Agent.Warp(hit.position);
                     if (NumberAliveEggs == 0)
                     {
                         snake.Wander();
                     }
                     else
                     {
-                        snake.GoToEgg(AliveEggs[Random.Range(0, AliveEggs.Count)]);
+                        snake.Follow(AliveEggs[Random.Range(0, AliveEggs.Count)].transform);
                     }
+                }
+                yield return wait;
+                iteration++;
+            }
+        }
+        private IEnumerator SpawnFoxes(Bounds spawnBounds)
+        {
+            WaitForSeconds wait = new(20);
+            int iteration = 1;
+            while (enabled)
+            {
+                yield return wait;
+                foreach (Fox fox in SpawnEnemy(FoxPool, spawnBounds, iteration))
+                {
+                    if (AliveChickens.Count == 0)
+                    {
+                        fox.Wander();
+                    }
+                    else
+                    {
+                        fox.Follow(AliveChickens[Random.Range(0, AliveChickens.Count)].transform);
+                    }
+                }
+                iteration++;
+            }
+        }
+
+        private List<T> SpawnEnemy<T>(IObjectPool<T> pool, Bounds spawnBounds, int iteration) where T : EnemyBase
+        {
+            List<T> enemies = new(iteration * DifficultyFactor);
+            for (int i = 0; i < iteration * DifficultyFactor; i++)
+            {
+                T enemy = pool.Get();
+
+                enemies.Add(enemy);
+                Vector3 spawnLocation = PickSpawnLocationOnEdgeOfBounds(spawnBounds);
+
+                if (NavMesh.SamplePosition(spawnLocation, out NavMeshHit hit, 1, enemy.Agent.areaMask))
+                {
+                    enemy.transform.position = hit.position;
+                    enemy.Agent.Warp(hit.position);
                 }
                 else
                 {
@@ -128,24 +126,73 @@ namespace LlamAcademy.ChickenDefense.AI
                         "Unable to find a suitable location on bounds of the NavMeshSurface. Scene is expected to have a rectangular NavMesh Surface for enemy spawns!");
                 }
             }
+
+            return enemies;
+        }
+
+        private static Vector3 PickSpawnLocationOnEdgeOfBounds(Bounds spawnBounds)
+        {
+            Vector3 spawnLocation = Random.value switch
+            {
+                < 0.25f => new Vector3(spawnBounds.min.x, 0, Random.Range(spawnBounds.min.z, spawnBounds.max.z)),
+                < 0.5f => new Vector3(Random.Range(spawnBounds.min.x, spawnBounds.max.x), 0, spawnBounds.min.z),
+                < 0.75f => new Vector3(spawnBounds.max.x, 0, Random.Range(spawnBounds.min.z, spawnBounds.max.z)),
+                _ => new Vector3(Random.Range(spawnBounds.min.x, spawnBounds.max.x), 0, spawnBounds.max.z)
+            };
+
+            return spawnLocation;
         }
 
         private void HandleUnitDeath(UnitDeathEvent @event)
         {
-            if (@event.Unit is Snake snake)
+            switch (@event.Unit)
             {
-                AliveSnakes.Remove(snake);
+                case Snake snake:
+                    AliveSnakes.Remove(snake);
+                    break;
+                case Fox fox:
+                    AliveFoxes.Remove(fox);
+                    break;
+                case Chicken chicken:
+                    AliveChickens.Remove(chicken);
+
+                    foreach (Fox fox in AliveFoxes)
+                    {
+                        if (AliveChickens.Count == 0)
+                        {
+                            fox.MoveTo(PickSpawnLocationOnEdgeOfBounds(FoxSurface.navMeshData.sourceBounds));
+                        }
+                        else if (fox.TransformTarget == null || @event.Unit.transform == fox.TransformTarget)
+                        {
+                            fox.Follow(AliveChickens[Random.Range(0, AliveChickens.Count)].transform);
+                        }
+                    }
+                    break;
             }
         }
 
         private void HandleUnitSpawn(UnitSpawnEvent @event)
         {
-            if (@event.Unit is Snake snake)
+            switch (@event.Unit)
             {
-                AliveSnakes.Add(snake);
+                case Snake snake:
+                    AliveSnakes.Add(snake);
+                    break;
+                case Fox fox:
+                    AliveFoxes.Add(fox);
+                    break;
+                case Chicken chicken:
+                    AliveChickens.Add(chicken);
+                    
+                    foreach (Fox fox in AliveFoxes.Where(fox => fox.TransformTarget == null))
+                    {
+                        fox.Follow(AliveChickens[Random.Range(0, AliveChickens.Count)].transform);
+                    }
+                    
+                    break;
             }
         }
-
+        
         private void HandleLoseEgg(EggRemovedEvent @event)
         {
             NumberAliveEggs -= @event.Eggs.Length;
@@ -163,7 +210,7 @@ namespace LlamAcademy.ChickenDefense.AI
                 }
                 else if (snake.TransformTarget != null && @event.Eggs.Contains(snake.TransformTarget.GetComponent<Egg>()))
                 {
-                    snake.GoToEgg(AliveEggs[Random.Range(0, AliveEggs.Count)]);
+                    snake.Follow(AliveEggs[Random.Range(0, AliveEggs.Count)].transform);
                 }
             }
         }
@@ -174,7 +221,7 @@ namespace LlamAcademy.ChickenDefense.AI
             {
                 foreach (Snake snake in AliveSnakes)
                 {
-                    snake.GoToEgg(@event.Egg);
+                    snake.Follow(@event.Egg.transform);
                 }
             }
             else
@@ -195,7 +242,7 @@ namespace LlamAcademy.ChickenDefense.AI
 
                     if (pathToNewEggDistance < currentPathDistance)
                     {
-                        snake.GoToEgg(@event.Egg);
+                        snake.Follow(@event.Egg.transform);
                     }
                 }
             }

@@ -10,22 +10,6 @@ namespace LlamAcademy.ChickenDefense.Units.Enemies.Snake.Behaviors
     public class Snake : EnemyBase
     {
         [SerializeField] private SnakeSplineAnimator SplineAnimator;
-        private bool IsWandering = true;
-        private Egg TargetEgg;
-        
-        public void GoToEgg(Egg egg)
-        {
-            TransformTarget = egg.transform;
-            FSM.Trigger(StateEvent.MoveIssued);
-        }
-
-        public void Wander()
-        {
-            IsWandering = true;
-            TransformTarget = null;
-            Target = PickNearbyWanderPosition();
-            FSM.Trigger(StateEvent.MoveIssued);
-        }
         
         protected override void AddStates()
         {
@@ -85,17 +69,6 @@ namespace LlamAcademy.ChickenDefense.Units.Enemies.Snake.Behaviors
 
         private bool IsCloseToTarget(Transition<EnemyStates> _) =>
             Agent.enabled && Agent.remainingDistance <= Agent.stoppingDistance;
-        private bool ShouldTransitionToIdle(Transition<EnemyStates> _) => !IsWandering && IsCloseToTarget(_);
         private bool ShouldPickNewWanderLocation(Transition<EnemyStates> _) => IsWandering && IsCloseToTarget(_);
-        
-        private Vector3 PickNearbyWanderPosition()
-        {
-            Vector2 randomPosition = Random.insideUnitCircle * 3f; 
-            return transform.position + new Vector3(
-                randomPosition.x,
-                0,
-                randomPosition.y
-            );
-        }
     }
 }

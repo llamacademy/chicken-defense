@@ -12,5 +12,9 @@ namespace LlamAcademy.ChickenDefense.Units
         public ResourceCostSO ResourceCost;
         public NavMeshAgentConfigSO NavMeshAgentConfig;
         public AttackConfigSO AttackConfig;
+        /// <summary>
+        /// Defines how the AI unit should run away when high priority enemies come nearby.
+        /// </summary>
+        public RunAwayConfigSO RunAwayConfig;
     }
 }

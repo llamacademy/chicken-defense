@@ -13,7 +13,7 @@ namespace LlamAcademy.ChickenDefense.Units.Enemies
         [SerializeField] private TargetSensor FoodSensor;
         public List<NavMeshAgent> NearbyLlamas = new();
         public List<Transform> NearbyFood = new();
-        public Vector2 RunCompletelyAwayDistance = new(5,2); // TODO: move to SO
+        protected bool IsWandering;
         
         protected override void OnEnable()
         {
@@ -32,6 +32,14 @@ namespace LlamAcademy.ChickenDefense.Units.Enemies
             FoodSensor.OnTargetEnter -= HandleFoodEnter;
             FoodSensor.OnTargetEnter -= HandleFoodExit;
         }
+        
+        public void Wander()
+        {
+            IsWandering = true;
+            TransformTarget = null;
+            Target = PickNearbyWanderPosition();
+            FSM.Trigger(StateEvent.MoveIssued);
+        }
 
         public void GetAttacked()
         {
@@ -46,6 +54,16 @@ namespace LlamAcademy.ChickenDefense.Units.Enemies
             {
                 FSM.Trigger(StateEvent.MoveIssued);
             }
+        }
+        
+        protected Vector3 PickNearbyWanderPosition()
+        {
+            Vector2 randomPosition = Random.insideUnitCircle * 3f; 
+            return transform.position + new Vector3(
+                randomPosition.x,
+                0,
+                randomPosition.y
+            );
         }
 
         protected abstract void HandleLlamaEnter(Transform target);
