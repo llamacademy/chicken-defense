@@ -124,7 +124,7 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.Behaviors
 
         private void OnTargetEnterRadius(Transform target)
         {
-            if (target.TryGetComponent(out IDamageable damageable))
+            if (target.TryGetComponent(out IDamageable damageable) && Agent.CalculatePath(target.position, new NavMeshPath()))
             {
                 NearbyEnemies.Add(damageable);
                 
