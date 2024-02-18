@@ -24,7 +24,7 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.Behaviors
         [field: SerializeField] public AnimationCurve StompHeightCurve { get; private set; }
         private HybridStateMachine<LlamaStates, StateEvent> AttackStateMachine;
         private ObjectPool<Spit> SpitPool;
-        
+
         protected override void Awake()
         {
             Agent = GetComponent<NavMeshAgent>();
@@ -62,9 +62,9 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.Behaviors
             else
             {
                 AttackStateMachine.AddState(LlamaStates.Attack,
-                    new MeleeAttackState(this, OnTargetDie, LeftLegConstraint, RightLegConstraint));                
+                    new MeleeAttackState(this, OnTargetDie, LeftLegConstraint, RightLegConstraint));
             }
-            
+
             AttackStateMachine.AddState(LlamaStates.Move, new MoveState<LlamaStates>(this));
         }
 
@@ -84,7 +84,8 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.Behaviors
         {
             FSM.AddState(LlamaStates.Idle, new IdleState<LlamaStates>(this));
             FSM.AddState(LlamaStates.Move, new MoveState<LlamaStates>(this));
-            FSM.AddState(LlamaStates.Attack, AttackStateMachine); // ideally have exit time so animation for stomp completes
+            FSM.AddState(LlamaStates.Attack,
+                AttackStateMachine); // ideally have exit time so animation for stomp completes
 
             FSM.SetStartState(LlamaStates.Idle);
         }
@@ -104,7 +105,11 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.Behaviors
 
         private void OnTargetDie()
         {
-            NearbyEnemies.Remove(TransformTarget.GetComponent<IDamageable>());
+            if (TransformTarget != null)
+            {
+                NearbyEnemies.Remove(TransformTarget.GetComponent<IDamageable>());
+            }
+
             if (NearbyEnemies.Count != 0)
             {
                 TransformTarget = NearbyEnemies[0].Transform;
@@ -122,10 +127,11 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.Behaviors
             if (target.TryGetComponent(out IDamageable damageable))
             {
                 NearbyEnemies.Add(damageable);
-                // TODO: is this the right way? I can't ever remember
-                NearbyEnemies.Sort((a, b) => Mathf.FloorToInt(
-                    Vector3.SqrMagnitude(b.Transform.position - transform.position) -
-                    Vector3.SqrMagnitude(a.Transform.position - transform.position)));
+                
+                // Pick the closest one
+                NearbyEnemies.Sort((a, b) =>
+                    Vector3.SqrMagnitude(a.Transform.position - transform.position)
+                        .CompareTo(Vector3.SqrMagnitude(b.Transform.position - transform.position)));
             }
 
             TransformTarget = NearbyEnemies[0].Transform;

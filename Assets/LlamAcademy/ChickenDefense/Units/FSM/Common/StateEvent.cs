@@ -4,6 +4,7 @@ namespace LlamAcademy.ChickenDefense.Units.FSM.Common
     {
         MoveIssued,
         StopIssued,
-        AttackIssued
+        AttackIssued,
+        Die
     }
 }

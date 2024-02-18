@@ -69,6 +69,8 @@ namespace LlamAcademy.ChickenDefense.UI
                 headerContainer.Add(labeledIcon);
                 PopulationLabeledIcons.Add(labeledIcon);
             }
+            
+            labeledIcon.AddToClassList("padding-right-sm");
         }
         
         private void BuildUnitUI()
@@ -79,6 +81,7 @@ namespace LlamAcademy.ChickenDefense.UI
             foreach (UnitSO buildableUnit in BuildableUnits)
             {
                 VisualElement clickableUnit = new UnitIcon(buildableUnit);
+                clickableUnit.AddToClassList("padding-right-sm");
                 clickableUnit.RegisterCallback<ClickEvent>((_) => HandleUnitClick(buildableUnit));
                 clickableUnit.SetEnabled(CurrentEggs >= buildableUnit.ResourceCost.Cost);
                 UnitContainer.Add(clickableUnit);

@@ -49,6 +49,7 @@ namespace LlamAcademy.ChickenDefense.Units.Chicken.Behaviors
             FSM.AddState(ChickenStates.Move, new MoveState<ChickenStates>(this));
             FSM.AddState(ChickenStates.Eat, new EatState(this));
             FSM.AddState(ChickenStates.LayEgg, new LayEggState(this));
+            FSM.AddState(ChickenStates.Idle, new IdleState<ChickenStates>(this));
         }
 
         protected override void AddTransitions()
@@ -62,6 +63,8 @@ namespace LlamAcademy.ChickenDefense.Units.Chicken.Behaviors
             FSM.AddTransition(new TransitionAfter<ChickenStates>(ChickenStates.Move, ChickenStates.Move, 3f,
                 IsCloseToTarget, (_) => PickTargetLocation()));
             FSM.AddTransition(new Transition<ChickenStates>(ChickenStates.Move, ChickenStates.Eat, CanEat));
+            FSM.AddTransition(new Transition<ChickenStates>(ChickenStates.Move, ChickenStates.Idle, IsCloseToTarget));
+            FSM.AddTransition(new TransitionAfter<ChickenStates>(ChickenStates.Idle, ChickenStates.Move, Random.Range(1.25f, 2), null, (_) => PickTargetLocation()));
         }
 
         private bool IsFull(Transition<ChickenStates> _) => Hunger <= 0;
@@ -69,9 +72,12 @@ namespace LlamAcademy.ChickenDefense.Units.Chicken.Behaviors
         private bool CanEat(Transition<ChickenStates> _) => !IsInChickenCoop() && IsHungry(_);
 
         private bool CanLayEgg(Transition<ChickenStates> _) =>
-            LastEggTime + LayEggDelay <= Time.time && IsInChickenCoop() && IsCloseToTarget(null);
+            LastEggTime + LayEggDelay <= Time.time && IsInChickenCoop() && IsCloseToTarget();
 
         private bool IsCloseToTarget(TransitionAfter<ChickenStates> _) =>
+            Agent.enabled && Agent.remainingDistance <= Agent.stoppingDistance;
+
+        private bool IsCloseToTarget(Transition<ChickenStates> _ = null) =>
             Agent.enabled && Agent.remainingDistance <= Agent.stoppingDistance;
 
         private bool IsInChickenCoop() => ChickenCoop.CoopBounds.Intersects(transform.GetComponent<Collider>().bounds);

@@ -17,7 +17,7 @@ namespace LlamAcademy.ChickenDefense.Units.Enemies.FSM.Common
         {
             base.OnEnter();
             NavMeshAgent.isStopped = false;
-            Animator.CrossFade(AnimatorStates.WALK_ANIMATION, 0.15f);
+            Animator.CrossFade(AnimatorStates.WALK, 0.15f);
             // Just take the point if we click on the floor or if there's no collider
             // Otherwise, don't walk inside that object!
             LastDestination = GetMoveTargetLocation();

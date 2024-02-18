@@ -3,6 +3,6 @@
     <ui:VisualElement name="runtime-ui" style="flex-grow: 1;">
         <ui:VisualElement name="runtime-ui__header" picking-mode="Ignore" style="max-height: 10%; align-items: flex-end; flex-direction: row; justify-content: flex-end;" />
         <ui:VisualElement name="runtime-ui__body" picking-mode="Ignore" style="flex-grow: 1;" />
-        <ui:VisualElement name="runtime-ui__footer" style="flex-grow: 1; justify-content: center; max-height: 10%; align-items: center; flex-direction: row;" />
+        <ui:VisualElement name="runtime-ui__footer" style="flex-grow: 1; justify-content: center; max-height: 15%; align-items: center; flex-direction: row;" />
     </ui:VisualElement>
 </ui:UXML>

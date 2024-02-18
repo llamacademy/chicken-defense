@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using LlamAcademy.ChickenDefense.EventBus;
 using LlamAcademy.ChickenDefense.Events;
 using LlamAcademy.ChickenDefense.Units;
@@ -53,13 +54,14 @@ namespace LlamAcademy.ChickenDefense.AI
 
         private IEnumerator SpawnEnemies(Bounds spawnBounds)
         {
-            WaitForSeconds snakeBurstSpawnWait = new WaitForSeconds(25f);
+            WaitForSeconds snakeBurstSpawnWait = new(15f);
             int iteration = 1;
             while (enabled)
             {
                 // TODO: maybe more complex spawning logic
                 SpawnSnakes(spawnBounds, iteration);
                 yield return snakeBurstSpawnWait;
+                iteration++;
             }
         }
 
@@ -68,7 +70,7 @@ namespace LlamAcademy.ChickenDefense.AI
             for (int i = 0; i < iteration; i++)
             {
                 Snake snake = SnakePool.Get();
-                
+
                 Vector3 spawnLocation;
                 if (Random.value < 0.25f)
                 {
@@ -122,7 +124,8 @@ namespace LlamAcademy.ChickenDefense.AI
                 }
                 else
                 {
-                    Debug.LogError("Unable to find a suitable location on bounds of the NavMeshSurface. Scene is expected to have a rectangular NavMesh Surface for enemy spawns!");
+                    Debug.LogError(
+                        "Unable to find a suitable location on bounds of the NavMeshSurface. Scene is expected to have a rectangular NavMesh Surface for enemy spawns!");
                 }
             }
         }
@@ -146,17 +149,21 @@ namespace LlamAcademy.ChickenDefense.AI
         private void HandleLoseEgg(EggRemovedEvent @event)
         {
             NumberAliveEggs -= @event.Eggs.Length;
-            
+
             foreach (Egg egg in @event.Eggs)
             {
                 AliveEggs.Remove(egg);
             }
 
-            if (NumberAliveEggs == 0)
+            foreach (Snake snake in AliveSnakes)
             {
-                foreach (Snake snake in AliveSnakes)
+                if (NumberAliveEggs == 0)
                 {
                     snake.Wander();
+                }
+                else if (snake.TransformTarget != null && @event.Eggs.Contains(snake.TransformTarget.GetComponent<Egg>()))
+                {
+                    snake.GoToEgg(AliveEggs[Random.Range(0, AliveEggs.Count)]);
                 }
             }
         }
@@ -196,7 +203,7 @@ namespace LlamAcademy.ChickenDefense.AI
             NumberAliveEggs++;
             AliveEggs.Add(@event.Egg);
         }
-        
+
         private static float SumSquareDistances(NavMeshPath path)
         {
             float squareDistance = 0;

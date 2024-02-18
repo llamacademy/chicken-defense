@@ -17,7 +17,6 @@ namespace LlamAcademy.ChickenDefense.Units.Enemies.Snake.Behaviors
         {
             TransformTarget = egg.transform;
             FSM.Trigger(StateEvent.MoveIssued);
-            IsWandering = false;
         }
 
         public void Wander()
@@ -43,25 +42,23 @@ namespace LlamAcademy.ChickenDefense.Units.Enemies.Snake.Behaviors
                 (_) => SplineAnimator.enabled = false);
 
             FSM.AddTransition(new Transition<EnemyStates>(EnemyStates.Move, EnemyStates.Move, ShouldPickNewWanderLocation, (_) => SplineAnimator.enabled = true));
-            // died
-            FSM.AddTransition(new Transition<EnemyStates>(EnemyStates.Move, EnemyStates.Idle, ShouldTransitionToIdle, (_) =>
+
+            FSM.AddTriggerTransitionFromAny(StateEvent.Die, EnemyStates.Idle, null, (_) =>
             {
                 gameObject.SetActive(false);
                 if (TransformTarget != null && TransformTarget.TryGetComponent(out Egg _))
                 {
                     TransformTarget.gameObject.SetActive(false);
                 }
-            }));
+            });
         }
 
         protected override void HandleLlamaEnter(Transform target)
         {
             NearbyLlamas.Add(target.GetComponent<NavMeshAgent>());
-            // TODO: is this the right way? I can't ever remember
             NearbyLlamas.Sort((a, b) =>
-                Mathf.FloorToInt(
-                    Vector3.SqrMagnitude(b.transform.position - transform.position) -
-                    Vector3.SqrMagnitude(a.transform.position - transform.position)));
+                Vector3.SqrMagnitude(b.transform.position - transform.position)
+                    .CompareTo(Vector3.SqrMagnitude(a.transform.position - transform.position)));
         }
 
         protected override void HandleLlamaExit(Transform target)
@@ -71,6 +68,15 @@ namespace LlamAcademy.ChickenDefense.Units.Enemies.Snake.Behaviors
 
         protected override void HandleFoodEnter(Transform target)
         {
+            if (target == TransformTarget)
+            {
+                Invoke(nameof(Disable), 1f);
+            }
+        }
+
+        private void Disable()
+        {
+            FSM.Trigger(StateEvent.Die);
         }
 
         protected override void HandleFoodExit(Transform target)
@@ -79,7 +85,6 @@ namespace LlamAcademy.ChickenDefense.Units.Enemies.Snake.Behaviors
 
         private bool IsCloseToTarget(Transition<EnemyStates> _) =>
             Agent.enabled && Agent.remainingDistance <= Agent.stoppingDistance;
-
         private bool ShouldTransitionToIdle(Transition<EnemyStates> _) => !IsWandering && IsCloseToTarget(_);
         private bool ShouldPickNewWanderLocation(Transition<EnemyStates> _) => IsWandering && IsCloseToTarget(_);
         

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Snake NavMeshAgent Config
   m_EditorClassIdentifier: 
   AgentTypeId: 1479372276
-  BaseOffset: 0.5
-  Speed: 1.5
+  BaseOffset: 0
+  Speed: 0.5
   AngularSpeed: 120
   Acceleration: 8
   StoppingDistance: 0.5

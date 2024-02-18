@@ -4,6 +4,7 @@
     {
         Move,
         LayEgg,
-        Eat
+        Eat,
+        Idle
     }
 }

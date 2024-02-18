@@ -29,7 +29,7 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.FSM
             base.OnEnter();
             Damageable = Unit.TransformTarget.GetComponent<IDamageable>();
             NavMeshAgent.isStopped = true;
-            Animator.CrossFade(AnimatorStates.IDLE_ANIMATION, 0.10f);
+            Animator.CrossFade(AnimatorStates.IDLE, 0.10f);
         }
 
         public override void OnLogic()
