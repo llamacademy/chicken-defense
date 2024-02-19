@@ -17,7 +17,7 @@ namespace LlamAcademy.ChickenDefense.AI
         [SerializeField] private UnitSO Chicken;
         [SerializeField] private Egg EggPrefab;
         [SerializeField] [Range(5, 15)] private int InitialChickens = 10;
-        [SerializeField] [Range(5, 10)] private float SpawnRate = 5f;
+        [SerializeField] [Range(5, 60)] private float SpawnRate = 5f;
         [SerializeField] private NavMeshSurface ChickenSurface;
         [SerializeField] [Range(5, 20)] private int MaxChickens = 20;
         [SerializeField] [Range(5, 20)] private int InitialEggs = 5;

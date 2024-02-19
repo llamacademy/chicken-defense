@@ -84,8 +84,7 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.Behaviors
         {
             FSM.AddState(LlamaStates.Idle, new IdleState<LlamaStates>(this));
             FSM.AddState(LlamaStates.Move, new MoveState<LlamaStates>(this));
-            FSM.AddState(LlamaStates.Attack,
-                AttackStateMachine); // ideally have exit time so animation for stomp completes
+            FSM.AddState(LlamaStates.Attack, AttackStateMachine); 
 
             FSM.SetStartState(LlamaStates.Idle);
         }
@@ -109,6 +108,9 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.Behaviors
 
             if (NearbyEnemies.Count != 0)
             {
+                NearbyEnemies.Sort((a, b) =>
+                    Vector3.SqrMagnitude(a.Transform.position - transform.position)
+                        .CompareTo(Vector3.SqrMagnitude(b.Transform.position - transform.position)));
                 TransformTarget = NearbyEnemies[0].Transform;
             }
             else

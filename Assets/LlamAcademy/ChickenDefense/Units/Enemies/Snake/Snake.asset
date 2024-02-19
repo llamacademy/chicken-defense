@@ -19,3 +19,4 @@ MonoBehaviour:
   ResourceCost: {fileID: 0}
   NavMeshAgentConfig: {fileID: 11400000, guid: 7dc4a77d613044e4c834cad183e56465, type: 2}
   AttackConfig: {fileID: 0}
+  RunAwayConfig: {fileID: 11400000, guid: 535104c9f8384a04597397d452fa7e8e, type: 2}

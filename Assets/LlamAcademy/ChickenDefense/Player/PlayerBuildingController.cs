@@ -5,6 +5,7 @@ using LlamAcademy.ChickenDefense.Units;
 using LlamAcademy.ChickenDefense.Units.Chicken.Behaviors;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 
@@ -53,7 +54,7 @@ namespace LlamAcademy.ChickenDefense.Player
             {
                 PlacementGhost.transform.position = hit.point;
 
-                if (Mouse.current.leftButton.wasReleasedThisFrame)
+                if (Mouse.current.leftButton.wasReleasedThisFrame && !EventSystem.current.IsPointerOverGameObject())
                 {
                     Instantiate(ActiveUnit.Prefab, PlacementGhost.transform.position, PlacementGhost.transform.rotation);
                     for (int i = 0; i < ActiveUnit.ResourceCost.Cost; i++)
