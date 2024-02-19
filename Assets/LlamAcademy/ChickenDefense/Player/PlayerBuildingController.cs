@@ -5,6 +5,7 @@ using LlamAcademy.ChickenDefense.Units;
 using LlamAcademy.ChickenDefense.Units.Chicken.Behaviors;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
@@ -27,6 +28,10 @@ namespace LlamAcademy.ChickenDefense.Player
         private EventBinding<EggRemovedEvent> EggRemovedEventBinding;
         private List<Egg> Eggs = new();
 
+        private NavMeshQueryFilter QueryFilter;
+        private static readonly int COLOR_PROPERTY = Shader.PropertyToID("_Tint");
+        private static readonly Color BASE_COLOR = new(0.407f, 0.741f, 0.988f, 0.466f);
+
         private void Awake()
         {
             Camera = GetComponent<Camera>();
@@ -46,12 +51,27 @@ namespace LlamAcademy.ChickenDefense.Player
             
             CameraMoveConfig.HandlePanning(mousePosition, VirtualCameraTarget);
 
-            if (ActiveUnit != null && Physics.Raycast(
-                    cameraRay,
-                    out RaycastHit hit,
-                    float.MaxValue,
-                    PlacementLayers))
+            if (ActiveUnit != null)
             {
+                if (Physics.Raycast(
+                        cameraRay,
+                        out RaycastHit hit,
+                        float.MaxValue,
+                        PlacementLayers) && NavMesh.SamplePosition(hit.point, out NavMeshHit navMeshHit, 0.25f, QueryFilter))
+                {
+                    foreach (Renderer renderer in PlacementGhost.GetComponentsInChildren<Renderer>())
+                    {
+                        renderer.material.SetColor(COLOR_PROPERTY, BASE_COLOR);
+                    }
+                }
+                else
+                {
+                    foreach (Renderer renderer in PlacementGhost.GetComponentsInChildren<Renderer>())
+                    {
+                        renderer.material.SetColor(COLOR_PROPERTY, Color.red);
+                    }
+                }
+                
                 PlacementGhost.transform.position = hit.point;
 
                 if (Mouse.current.leftButton.wasReleasedThisFrame && !EventSystem.current.IsPointerOverGameObject())
@@ -85,6 +105,12 @@ namespace LlamAcademy.ChickenDefense.Player
             }
                 
             PlacementGhost = Instantiate(@event.Unit.PlacementGhostPrefab, spawnLocation, quaternion.Euler(0, Random.Range(0, 359), 0));
+            NavMeshAgent agent = PlacementGhost.GetComponent<NavMeshAgent>();
+            QueryFilter = new NavMeshQueryFilter()
+            {
+                agentTypeID = agent.agentTypeID,
+                areaMask = agent.areaMask
+            };
             ActiveUnit = @event.Unit;
         }
 
