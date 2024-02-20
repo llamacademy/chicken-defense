@@ -20,9 +20,8 @@ namespace LlamAcademy.ChickenDefense.Player
         [SerializeField] private RectTransform SelectionBox;
         [SerializeField] private float MouseDragDelay = 0.1f;
 
-        [Space]
-        [SerializeField] private UIDocument RuntimeUI;
-
+        [Space] [SerializeField] private Renderer ClickIcon;
+        
         [Header("Layers")] 
         [SerializeField] private LayerMask SelectableLayers;
         [SerializeField] private LayerMask CommandTargetLayers;
@@ -39,6 +38,7 @@ namespace LlamAcademy.ChickenDefense.Player
 
         private EventBinding<UnitSpawnEvent> UnitSpawnEventBinding;
         private EventBinding<UnitDeathEvent> UnitDeathEventBinding;
+        private static readonly int CLICK_TIME_PROPERTY = Shader.PropertyToID("_ClickTime");
 
         private void Awake()
         {
@@ -205,6 +205,9 @@ namespace LlamAcademy.ChickenDefense.Player
                     float.MaxValue,
                     CommandTargetLayers))
             {
+                ClickIcon.transform.position = hit.point + Vector3.up * 0.01f;
+                ClickIcon.material.SetFloat(CLICK_TIME_PROPERTY, Time.time);
+
                 foreach (AbstractUnit unit in SelectedUnits)
                 {
                     if (hit.collider.TryGetComponent(out IDamageable damageable))
