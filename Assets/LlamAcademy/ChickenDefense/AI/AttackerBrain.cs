@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,32 @@ namespace LlamAcademy.ChickenDefense.AI
         private ObjectPool<Snake> SnakePool;
         private ObjectPool<Fox> FoxPool;
 
+        [SerializeField]
+        private DifficultyFactorScaling[] DifficultyScaling = new[]
+        {
+            new DifficultyFactorScaling(20, 35, 1.1f),
+            new DifficultyFactorScaling(17, 30, 1.25f),
+            new DifficultyFactorScaling(15, 25, 1.5f),
+            new DifficultyFactorScaling(12, 20, 2),
+            new DifficultyFactorScaling(12, 20, 3),
+        };
+
+        
+        [Serializable]
+        private struct DifficultyFactorScaling
+        {
+            public float SecondsBetweenSnakeSpawns;
+            public float SecondsBetweenFoxSpawns;
+            public float MultiplierPerSpawn;
+
+            public DifficultyFactorScaling(float secondsBetweenSnakeSpawns, float secondsBetweenFoxSpawns, float multiplierPerSpawn)
+            {
+                SecondsBetweenFoxSpawns = secondsBetweenFoxSpawns;
+                SecondsBetweenSnakeSpawns = secondsBetweenSnakeSpawns;
+                MultiplierPerSpawn = multiplierPerSpawn;
+            }
+        }
+
         private void Awake()
         {
             EggRemovedBinding = new EventBinding<EggRemovedEvent>(HandleLoseEgg);
@@ -64,7 +91,7 @@ namespace LlamAcademy.ChickenDefense.AI
 
         private IEnumerator SpawnSnakes(Bounds spawnBounds)
         {
-            WaitForSeconds wait = new(11);
+            WaitForSeconds wait = new(DifficultyScaling[DifficultyFactor].SecondsBetweenSnakeSpawns);
             int iteration = 1;
             while (enabled)
             {
@@ -85,7 +112,7 @@ namespace LlamAcademy.ChickenDefense.AI
         }
         private IEnumerator SpawnFoxes(Bounds spawnBounds)
         {
-            WaitForSeconds wait = new(20);
+            WaitForSeconds wait = new(DifficultyScaling[DifficultyFactor].SecondsBetweenFoxSpawns);
             int iteration = 1;
             while (enabled)
             {
@@ -107,15 +134,20 @@ namespace LlamAcademy.ChickenDefense.AI
 
         private List<T> SpawnEnemy<T>(IObjectPool<T> pool, Bounds spawnBounds, int iteration) where T : EnemyBase
         {
-            List<T> enemies = new(iteration * DifficultyFactor);
-            for (int i = 0; i < iteration * DifficultyFactor; i++)
+            int spawns = iteration * Mathf.FloorToInt(DifficultyScaling[DifficultyFactor].MultiplierPerSpawn);
+            List<T> enemies = new(spawns);
+            for (int i = 0; i < spawns; i++)
             {
                 T enemy = pool.Get();
 
                 enemies.Add(enemy);
                 Vector3 spawnLocation = PickSpawnLocationOnEdgeOfBounds(spawnBounds);
-
-                if (NavMesh.SamplePosition(spawnLocation, out NavMeshHit hit, 1, enemy.Agent.areaMask))
+                NavMeshQueryFilter queryFilter = new()
+                {
+                    agentTypeID = enemy.Agent.agentTypeID,
+                    areaMask = enemy.Agent.areaMask
+                };
+                if (NavMesh.SamplePosition(spawnLocation, out NavMeshHit hit, 1, queryFilter))
                 {
                     enemy.transform.position = hit.position;
                     enemy.Agent.Warp(hit.position);
