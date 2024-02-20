@@ -5,7 +5,6 @@ using LlamAcademy.ChickenDefense.Events;
 using LlamAcademy.ChickenDefense.Units;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 
 namespace LlamAcademy.ChickenDefense.Player
 {
