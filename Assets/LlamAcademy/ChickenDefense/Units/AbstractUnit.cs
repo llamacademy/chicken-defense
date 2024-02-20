@@ -7,7 +7,7 @@ using UnityEngine.Rendering.Universal;
 namespace LlamAcademy.ChickenDefense.Units
 {
     [RequireComponent(typeof(NavMeshAgent), typeof(Animator))]
-    public abstract class AbstractUnit : MonoBehaviour, IDamageable, IMoveable, ISelectable
+    public abstract class AbstractUnit : MonoBehaviour, IDamageable, IMoveable, ISelectable, IAttacking
     {
         public UnitSO Unit;
         
@@ -71,6 +71,12 @@ namespace LlamAcademy.ChickenDefense.Units
         {
             TransformTarget = null;
             Target = target;
+        }
+
+        public virtual void Attack(IDamageable damageable)
+        {
+            TransformTarget = damageable.Transform;
+            Target = Vector3.zero;
         }
 
         public virtual void Follow(Transform target)

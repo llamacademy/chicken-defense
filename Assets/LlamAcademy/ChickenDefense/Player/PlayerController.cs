@@ -207,8 +207,14 @@ namespace LlamAcademy.ChickenDefense.Player
             {
                 foreach (AbstractUnit unit in SelectedUnits)
                 {
-                    unit.MoveTo(hit.point);
-                    // handle attack or move, only 2 options so way easier than RTS
+                    if (hit.collider.TryGetComponent(out IDamageable damageable))
+                    {
+                        unit.Attack(damageable);
+                    }
+                    else
+                    {
+                        unit.MoveTo(hit.point);    
+                    }
                 }
             }
         }

@@ -26,11 +26,11 @@ Material:
     m_TexEnvs:
     - _Albedo1:
         m_Texture: {fileID: 2800000, guid: 0e9ce7e5a30f2e84ea4a8e3130f60e8e, type: 3}
-        m_Scale: {x: 1, y: 1}
+        m_Scale: {x: 0.1, y: 0.1}
         m_Offset: {x: 0, y: 0}
     - _Albedo2:
         m_Texture: {fileID: 2800000, guid: 911413e66e03b8c409f2f1974ff11082, type: 3}
-        m_Scale: {x: 1, y: 1}
+        m_Scale: {x: 0.33, y: 0.33}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 0}

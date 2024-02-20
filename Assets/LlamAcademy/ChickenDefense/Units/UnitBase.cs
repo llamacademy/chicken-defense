@@ -44,6 +44,12 @@ namespace LlamAcademy.ChickenDefense.Units
             FSM.Trigger(StateEvent.MoveIssued);
         }
 
+        public override void Attack(IDamageable damageable)
+        {
+            base.Attack(damageable);
+            FSM.Trigger(StateEvent.AttackIssued);
+        }
+
         public virtual void Stop()
         {
             FSM.Trigger(StateEvent.StopIssued);

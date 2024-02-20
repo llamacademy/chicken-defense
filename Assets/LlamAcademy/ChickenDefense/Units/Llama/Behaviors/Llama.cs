@@ -97,9 +97,9 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.Behaviors
 
             FSM.AddTransition(new Transition<LlamaStates>(LlamaStates.Move, LlamaStates.Attack, IsCloseEnoughToAttack));
             FSM.AddTransition(new Transition<LlamaStates>(LlamaStates.Idle, LlamaStates.Attack, IsCloseEnoughToAttack));
-            // FSM.AddTransition(new Transition<LlamaStates>(LlamaStates.Attack, LlamaStates.Move,
-            //     IsNotCloseEnoughToAttack));
+            FSM.AddTransition(new Transition<LlamaStates>(LlamaStates.Move, LlamaStates.Attack, ShouldAttackNearestTarget, AssignNearbyTarget));
             FSM.AddTransition(new Transition<LlamaStates>(LlamaStates.Move, LlamaStates.Idle, IsCloseToTarget));
+            FSM.AddTransition(new Transition<LlamaStates>(LlamaStates.Idle, LlamaStates.Attack, ShouldAttackNearestTarget, AssignNearbyTarget));
         }
 
         private void OnTargetDie()
@@ -111,12 +111,18 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.Behaviors
                 NearbyEnemies.Sort((a, b) =>
                     Vector3.SqrMagnitude(a.Transform.position - transform.position)
                         .CompareTo(Vector3.SqrMagnitude(b.Transform.position - transform.position)));
-                TransformTarget = NearbyEnemies[0].Transform;
+
+                // only override target if we're actually attacking. Otherwise the llama will go crazy and ignore move commands
+                if (FSM.ActiveStateName == LlamaStates.Attack)
+                {
+                    TransformTarget = NearbyEnemies[0].Transform;
+                }
             }
-            else
+            else if (FSM.ActiveStateName == LlamaStates.Attack)
             {
+                // only override target if we're actually attacking. Otherwise the llama will go crazy and ignore move commands
+                Target = TransformTarget.position;
                 TransformTarget = null;
-                Target = transform.position;
                 FSM.Trigger(StateEvent.MoveIssued);
             }
         }
@@ -133,8 +139,12 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.Behaviors
                         .CompareTo(Vector3.SqrMagnitude(b.Transform.position - transform.position)));
             }
 
-            TransformTarget = NearbyEnemies[0].Transform;
-            FSM.Trigger(StateEvent.AttackIssued);
+            // only override target if we're actually attacking. Otherwise the llama will go crazy and ignore move commands
+            if (FSM.ActiveStateName == LlamaStates.Attack)
+            {
+                TransformTarget = NearbyEnemies[0].Transform;
+                FSM.Trigger(StateEvent.AttackIssued);
+            }
         }
 
         private void OnTargetExitRadius(Transform target)
@@ -164,8 +174,16 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.Behaviors
             return instance.GetComponent<Spit>();
         }
 
+        private void AssignNearbyTarget(Transition<LlamaStates> _)
+        {
+            TransformTarget = NearbyEnemies[0].Transform;
+        }
+        
         private bool IsCloseToTarget(Transition<LlamaStates> _) =>
             Agent.enabled && Agent.remainingDistance <= Agent.stoppingDistance;
+
+        private bool ShouldAttackNearestTarget(Transition<LlamaStates> _) =>
+            IsCloseToTarget(_) && NearbyEnemies.Count > 0;
 
         private bool IsCloseEnoughToAttack(Transition<LlamaStates> _) =>
             TransformTarget != null &&
