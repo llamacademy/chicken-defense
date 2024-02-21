@@ -18,7 +18,7 @@ namespace LlamAcademy.ChickenDefense.Player
         [SerializeField] private CameraMoveConfig CameraMoveConfig;
         [SerializeField] private Rigidbody VirtualCameraTarget;
         [SerializeField] private LayerMask PlacementLayers;
-        
+
         private GameObject PlacementGhost;
         private Camera Camera;
         private UnitSO ActiveUnit;
@@ -48,39 +48,22 @@ namespace LlamAcademy.ChickenDefense.Player
         {
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             Ray cameraRay = Camera.ScreenPointToRay(mousePosition);
-            
+
             CameraMoveConfig.HandlePanning(mousePosition, VirtualCameraTarget);
 
             if (ActiveUnit != null)
             {
-                if (Physics.Raycast(
-                        cameraRay,
-                        out RaycastHit hit,
-                        float.MaxValue,
-                        PlacementLayers) && NavMesh.SamplePosition(hit.point, out NavMeshHit navMeshHit, 0.25f, QueryFilter))
-                {
-                    foreach (Renderer renderer in PlacementGhost.GetComponentsInChildren<Renderer>())
-                    {
-                        renderer.material.SetColor(COLOR_PROPERTY, BASE_COLOR);
-                    }
-                }
-                else
-                {
-                    foreach (Renderer renderer in PlacementGhost.GetComponentsInChildren<Renderer>())
-                    {
-                        renderer.material.SetColor(COLOR_PROPERTY, Color.red);
-                    }
-                }
-                
-                PlacementGhost.transform.position = hit.point;
+                SetGhostColorAndPosition(cameraRay);
 
                 if (Mouse.current.leftButton.wasReleasedThisFrame && !EventSystem.current.IsPointerOverGameObject())
                 {
-                    Instantiate(ActiveUnit.Prefab, PlacementGhost.transform.position, PlacementGhost.transform.rotation);
+                    Instantiate(ActiveUnit.Prefab, PlacementGhost.transform.position,
+                        PlacementGhost.transform.rotation);
                     for (int i = 0; i < ActiveUnit.ResourceCost.Cost; i++)
                     {
                         Eggs[0].gameObject.SetActive(false);
                     }
+
                     Destroy(PlacementGhost);
                     ActiveUnit = null;
                     Bus<InputModeChangedEvent>.Raise(new InputModeChangedEvent(ActiveInputTarget.Units));
@@ -88,11 +71,36 @@ namespace LlamAcademy.ChickenDefense.Player
             }
         }
 
+        private void SetGhostColorAndPosition(Ray cameraRay)
+        {
+            if (Physics.Raycast(
+                    cameraRay,
+                    out RaycastHit hit,
+                    float.MaxValue,
+                    PlacementLayers) &&
+                NavMesh.SamplePosition(hit.point, out NavMeshHit navMeshHit, 0.25f, QueryFilter))
+            {
+                foreach (Renderer renderer in PlacementGhost.GetComponentsInChildren<Renderer>())
+                {
+                    renderer.material.SetColor(COLOR_PROPERTY, BASE_COLOR);
+                }
+            }
+            else
+            {
+                foreach (Renderer renderer in PlacementGhost.GetComponentsInChildren<Renderer>())
+                {
+                    renderer.material.SetColor(COLOR_PROPERTY, Color.red);
+                }
+            }
+
+            PlacementGhost.transform.position = hit.point;
+        }
+
         private void HandleUnitSelected(UnitSelectedToPlaceEvent @event)
         {
             Destroy(PlacementGhost);
             Vector3 spawnLocation = Vector3.zero;
-            
+
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             Ray cameraRay = Camera.ScreenPointToRay(mousePosition);
             if (Physics.Raycast(
@@ -103,8 +111,9 @@ namespace LlamAcademy.ChickenDefense.Player
             {
                 spawnLocation = hit.point;
             }
-                
-            PlacementGhost = Instantiate(@event.Unit.PlacementGhostPrefab, spawnLocation, quaternion.Euler(0, Random.Range(0, 359), 0));
+
+            PlacementGhost = Instantiate(@event.Unit.PlacementGhostPrefab, spawnLocation,
+                quaternion.Euler(0, Random.Range(0, 359), 0));
             NavMeshAgent agent = PlacementGhost.GetComponent<NavMeshAgent>();
             QueryFilter = new NavMeshQueryFilter()
             {

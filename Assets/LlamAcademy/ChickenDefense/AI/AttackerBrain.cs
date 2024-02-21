@@ -49,7 +49,6 @@ namespace LlamAcademy.ChickenDefense.AI
             new DifficultyFactorScaling(12, 20, 3),
         };
 
-        
         [Serializable]
         private struct DifficultyFactorScaling
         {

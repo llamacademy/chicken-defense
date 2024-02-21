@@ -4,6 +4,7 @@ using LlamAcademy.ChickenDefense.EventBus;
 using LlamAcademy.ChickenDefense.Events;
 using LlamAcademy.ChickenDefense.Units;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace LlamAcademy.ChickenDefense.Player
@@ -30,7 +31,7 @@ namespace LlamAcademy.ChickenDefense.Player
         private Vector2 StartMousePosition;
         private float MouseDownTime;
         [SerializeField]
-        private List<AbstractUnit> AliveUnits = new List<AbstractUnit>(400);
+        private List<AbstractUnit> AliveUnits = new(400);
         private HashSet<AbstractUnit> SelectedUnits = new(12);
         private HashSet<AbstractUnit> AddedUnits = new(12);
         private HashSet<AbstractUnit> RemovedUnits = new(12);
@@ -70,7 +71,7 @@ namespace LlamAcademy.ChickenDefense.Player
 
             HandleDragSelect(cameraRay, mousePosition);
             CameraConfig.HandlePanning(mousePosition, VirtualCameraTarget);
-            HandleIssuingCommands(cameraRay, mousePosition);                
+            HandleIssuingCommands(cameraRay);                
         }
 
         private bool IsMouseWithinSafeZone(Vector2 mousePosition)
@@ -81,7 +82,7 @@ namespace LlamAcademy.ChickenDefense.Player
         private void HandleDragSelect(Ray cameraRay, Vector2 mousePosition)
         {
             bool mouseIsInSafeZone = IsMouseWithinSafeZone(mousePosition);
-            if (Mouse.current.leftButton.wasPressedThisFrame && !mouseIsInSafeZone)
+            if (Mouse.current.leftButton.wasPressedThisFrame && !EventSystem.current.IsPointerOverGameObject())
             {
                 SelectionBox.gameObject.SetActive(true);
                 StartMousePosition = mousePosition;
@@ -118,7 +119,7 @@ namespace LlamAcademy.ChickenDefense.Player
             else if (Mouse.current.leftButton.wasReleasedThisFrame)
             {
                 SelectionBox.gameObject.SetActive(false);
-                if (MouseDownTime + MouseDragDelay > Time.time || AddedUnits.Count == 0 && !mouseIsInSafeZone)
+                if (MouseDownTime + MouseDragDelay > Time.time || AddedUnits.Count == 0 && !EventSystem.current.IsPointerOverGameObject())
                 {
                     HandleLeftClick(cameraRay);
                 }
@@ -195,9 +196,9 @@ namespace LlamAcademy.ChickenDefense.Player
             return new Bounds(SelectionBox.anchoredPosition, SelectionBox.sizeDelta);
         }
 
-        private void HandleIssuingCommands(Ray cameraRay, Vector2 mousePosition)
+        private void HandleIssuingCommands(Ray cameraRay)
         {
-            if (Mouse.current.rightButton.wasReleasedThisFrame
+            if (Mouse.current.rightButton.wasReleasedThisFrame && SelectedUnits.Count > 0
                 && Physics.Raycast(
                     cameraRay,
                     out RaycastHit hit,
