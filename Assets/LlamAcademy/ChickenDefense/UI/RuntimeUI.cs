@@ -15,6 +15,8 @@ namespace LlamAcademy.ChickenDefense.UI
     [RequireComponent(typeof(UIDocument))]
     public class RuntimeUI : MonoBehaviour
     {
+        [SerializeField] private Camera MinimapCamera;
+        [SerializeField] private Transform VirtualCameraTarget;
         [SerializeField] private ResourceCostSO ResourceCost;
         [SerializeField] private UnitSO ChickenSO;
         [SerializeField] private UnitSO[] BuildableUnits;
@@ -22,10 +24,13 @@ namespace LlamAcademy.ChickenDefense.UI
         private VisualElement Footer;
         private LabeledIcon Resources;
         private VisualElement UnitContainer;
+        private VisualElement Minimap;
         
         private List<UnitPopulationLabeledIcon> PopulationLabeledIcons = new();
 
         private int CurrentEggs;
+        private bool MouseDownOnMinimap;
+        private LayerMask FloorLayer;
         
         private EventBinding<UnitSpawnEvent> SpawnEventBinding;
         private EventBinding<UnitDeathEvent> DieEventBinding;
@@ -36,6 +41,7 @@ namespace LlamAcademy.ChickenDefense.UI
         {
             UI = GetComponent<UIDocument>();
 
+            SetupMinimapClickConfig();
             BuildUnitUI();
             BuildPopulationAndResourceUI();
         }
@@ -50,6 +56,58 @@ namespace LlamAcademy.ChickenDefense.UI
             Bus<UnitDeathEvent>.Register(DieEventBinding);
             Bus<EggSpawnEvent>.Register(EggSpawnBinding);
             Bus<EggRemovedEvent>.Register(LostEggBinding);
+        }
+
+        private void SetupMinimapClickConfig()
+        {
+            Minimap = UI.rootVisualElement.Q("minimap");
+            FloorLayer = LayerMask.GetMask("Floor");
+            Minimap.RegisterCallback<MouseDownEvent>(HandleMinimapMouseDown);
+            Minimap.RegisterCallback<MouseMoveEvent>(HandleMinimapMouseMove);
+            Minimap.RegisterCallback<MouseUpEvent>(HandleMinimapMouseUp);
+            Minimap.RegisterCallback<MouseLeaveEvent>(HandleMinimapMouseLeave);
+        }
+
+        private void HandleMinimapMouseDown(MouseDownEvent evt)
+        {
+            MouseDownOnMinimap = true;
+
+            MoveVirtualCameraTarget(evt.mousePosition);
+        }
+
+        private void HandleMinimapMouseMove(MouseMoveEvent evt)
+        {
+            if (MouseDownOnMinimap)
+            {
+                MoveVirtualCameraTarget(evt.mousePosition);
+            }
+        }
+
+        private void HandleMinimapMouseLeave(MouseLeaveEvent evt)
+        {
+            MouseDownOnMinimap = false;
+        }
+
+        private void HandleMinimapMouseUp(MouseUpEvent evt)
+        {
+            MouseDownOnMinimap = false;
+        }
+        
+        private void MoveVirtualCameraTarget(Vector2 mousePosition)
+        {
+            // convert screen mouse position to "minimap screen" position
+            float widthMultiplier = (MinimapCamera.scaledPixelWidth / Minimap.layout.width);
+            float heightMultiplier = (MinimapCamera.scaledPixelHeight / Minimap.layout.width);
+            Vector2 convertedMousePosition = new(
+                mousePosition.x * widthMultiplier,
+                (Screen.height - mousePosition.y) * heightMultiplier // mousePosition.y is tied to top left instead of bottom left
+            );
+            
+            Ray cameraRay = MinimapCamera.ScreenPointToRay(convertedMousePosition);
+            if (Physics.Raycast(cameraRay, out RaycastHit hit, float.MaxValue, FloorLayer))
+            {
+                VirtualCameraTarget.position = hit.point;
+            }
         }
 
         private void BuildPopulationAndResourceUI()

@@ -35,6 +35,7 @@ namespace LlamAcademy.ChickenDefense.Player
         private HashSet<AbstractUnit> SelectedUnits = new(12);
         private HashSet<AbstractUnit> AddedUnits = new(12);
         private HashSet<AbstractUnit> RemovedUnits = new(12);
+        private List<RaycastResult> RaycastResults = new();
 
         private EventBinding<UnitSpawnEvent> UnitSpawnEventBinding;
         private EventBinding<UnitDeathEvent> UnitDeathEventBinding;
@@ -71,7 +72,7 @@ namespace LlamAcademy.ChickenDefense.Player
 
             HandleDragSelect(cameraRay, mousePosition);
             CameraConfig.HandlePanning(mousePosition, VirtualCameraTarget);
-            HandleIssuingCommands(cameraRay);                
+            HandleIssuingCommands(cameraRay);
         }
 
         private bool IsMouseWithinSafeZone(Vector2 mousePosition)
