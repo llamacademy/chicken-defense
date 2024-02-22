@@ -65,6 +65,7 @@ namespace LlamAcademy.ChickenDefense.UI
             DieEventBinding = new EventBinding<UnitDeathEvent>(OnUnitDeath);
             EggSpawnBinding = new EventBinding<EggSpawnEvent>(OnSpawnEgg);
             LostEggBinding = new EventBinding<EggRemovedEvent>(OnLoseEgg);
+            
             Bus<UnitSpawnEvent>.Register(SpawnEventBinding);
             Bus<UnitDeathEvent>.Register(DieEventBinding);
             Bus<EggSpawnEvent>.Register(EggSpawnBinding);

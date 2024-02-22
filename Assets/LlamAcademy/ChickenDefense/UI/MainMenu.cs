@@ -1,4 +1,7 @@
 using System;
+using LlamAcademy.ChickenDefense.AI;
+using LlamAcademy.ChickenDefense.EventBus;
+using LlamAcademy.ChickenDefense.Events;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -8,6 +11,7 @@ namespace LlamAcademy.ChickenDefense.UI
     public class MainMenu : VisualElement
     {
         private GameObject[] ObjectsToActivateOnPlay;
+
         public new class UxmlFactory : UxmlFactory<MainMenu> {}
 
         public MainMenu()
@@ -26,6 +30,7 @@ namespace LlamAcademy.ChickenDefense.UI
         private VisualElement ChickenLabel => this.Q<VisualElement>("chicken");
         private VisualElement DefenseLabel => this.Q<VisualElement>("defense");
         private VisualElement Popup => this.Q<VisualElement>("popup");
+        private EnumField Difficulty => this.Q<EnumField>("difficulty");
 
         public MainMenu(GameObject[] objectsToActivateOnPlay, Action onClose = null)
         {
@@ -38,22 +43,10 @@ namespace LlamAcademy.ChickenDefense.UI
             ObjectsToActivateOnPlay = objectsToActivateOnPlay;
             VisualTreeAsset asset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/LlamAcademy/ChickenDefense/UI/MainMenu.uxml");
             asset.CloneTree(this);
-            
-            //             
-            // MenuRoot = this.Q("main-menu");
-            // PlayButton = this.Q<Button>("play");
-            // CodeButton = this.Q<Button>("code");
-            // ExitButton = this.Q<Button>("exit");
-            // ClosePopupButton = this.Q<Button>("close-popup");
-            // GetCodeButton = this.Q<Button>("get-code");
-            // ViewYouTubeButton = this.Q<Button>("view-youtube");
-            // PatreonButton = this.Q<Button>("patreon");
-            // ChickenLabel = this.Q<VisualElement>("chicken");
-            // DefenseLabel = this.Q<VisualElement>("defense");
-            // Popup = this.Q<VisualElement>("popup");
-            
-            ChickenLabel.AddToClassList("active");
-            DefenseLabel.AddToClassList("active");
+
+            // delay invoking adding the class so the transition plays
+            ChickenLabel.schedule.Execute(() => ChickenLabel.AddToClassList("active")).StartingIn(1000);
+            DefenseLabel.schedule.Execute(() => DefenseLabel.AddToClassList("active")).StartingIn(1000);
             
             Popup.SetEnabled(false);
             
@@ -64,6 +57,12 @@ namespace LlamAcademy.ChickenDefense.UI
             GetCodeButton.RegisterCallback<ClickEvent>(HandleGetCodeClick);
             ViewYouTubeButton.RegisterCallback<ClickEvent>(HandleViewYouTubeClick);
             PatreonButton.RegisterCallback<ClickEvent>(HandlePatreonClick);
+            Difficulty.RegisterCallback<ChangeEvent<string>>(HandleDifficultyChanged);
+        }
+
+        private void HandleDifficultyChanged(ChangeEvent<string> evt)
+        {
+            Bus<DifficultyChangedEvent>.Raise(new DifficultyChangedEvent(Enum.Parse<Difficulty>(evt.newValue)));
         }
 
         private void HandlePlayClick(ClickEvent _)

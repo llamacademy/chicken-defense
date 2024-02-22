@@ -21,7 +21,7 @@ namespace LlamAcademy.ChickenDefense.AI
     {
         [SerializeField] private NavMeshSurface SnakeSurface;
         [SerializeField] private NavMeshSurface FoxSurface;
-        [SerializeField] [Range(1, 5)] private int DifficultyFactor = 2;
+        [SerializeField] [Range(1, 5)] private int DifficultyFactor = 1;
         [SerializeField] private UnitSO Snake;
         [SerializeField] private UnitSO Fox;
         private int NumberAliveEggs;
@@ -30,6 +30,7 @@ namespace LlamAcademy.ChickenDefense.AI
         private EventBinding<EggSpawnEvent> EggSpawnedBinding;
         private EventBinding<UnitSpawnEvent> SpawnedUnitBinding;
         private EventBinding<UnitDeathEvent> UnitDeathBinding;
+        private EventBinding<DifficultyChangedEvent> DifficultyChangedBinding;
 
         private List<Snake> AliveSnakes = new();
         private List<Fox> AliveFoxes = new();
@@ -78,6 +79,10 @@ namespace LlamAcademy.ChickenDefense.AI
 
             SnakePool = new ObjectPool<Snake>(() => Instantiate(Snake.Prefab).GetComponent<Snake>());
             FoxPool = new ObjectPool<Fox>(() => Instantiate(Fox.Prefab).GetComponent<Fox>());
+
+            DifficultyChangedBinding = new EventBinding<DifficultyChangedEvent>((evt) => DifficultyFactor = (int)evt.Difficulty);
+            Bus<DifficultyChangedEvent>.Register(DifficultyChangedBinding);
+            gameObject.SetActive(false);
         }
 
         private void Start()
