@@ -1,3 +1,12 @@
+#runtime-ui {
+    opacity: 1;
+    transition: opacity 250ms ease-in;
+}
+#runtime-ui.unity-disabled {
+    opacity: 0;
+    transition: opacity 250ms ease-in;
+}
+
 #runtime-ui__footer {
     align-items: center;
     justify-content: center;
@@ -5,4 +14,17 @@
 
 .padding-right-sm {
     padding-right: 8px;
+}
+
+.maximize {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.unity-disabled {
+    transition: scale 0ms linear 250ms;
+    scale: 0;
 }

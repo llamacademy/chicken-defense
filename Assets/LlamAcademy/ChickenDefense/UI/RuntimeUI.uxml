@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/LlamAcademy/ChickenDefense/UI/RuntimeUI.uss?fileID=7433441132597879392&amp;guid=1ca2c3a5d041da047924425366e978ce&amp;type=3#RuntimeUI" />
+    <ui:VisualElement name="root" picking-mode="Ignore" style="flex-grow: 1;">
+        <ui:VisualElement name="runtime-ui" picking-mode="Ignore" style="flex-grow: 1; position: absolute; left: 0; top: 0; right: 0; bottom: 0;">
+            <ui:VisualElement name="runtime-ui__header" picking-mode="Ignore" style="max-height: 10%; align-items: flex-end; flex-direction: row; justify-content: flex-end;" />
+            <ui:VisualElement name="runtime-ui__body" picking-mode="Ignore" style="flex-grow: 1;" />
+            <ui:VisualElement name="runtime-ui__footer" picking-mode="Ignore" style="flex-grow: 1; justify-content: center; max-height: 15%; align-items: center; flex-direction: row;" />
+            <ui:VisualElement name="minimap" style="flex-grow: 1; position: absolute; left: 0; bottom: 0; width: 400px; height: 400px; background-image: url(&apos;project://database/Assets/LlamAcademy/ChickenDefense/Materials/Minimap%20Render%20Texture.renderTexture?fileID=8400000&amp;guid=85f2ed2343064244595bdc553bf1c57b&amp;type=2#Minimap Render Texture&apos;); border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-left-color: rgb(255, 108, 0); border-right-color: rgb(255, 108, 0); border-top-color: rgb(255, 108, 0); border-bottom-color: rgb(255, 108, 0);" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

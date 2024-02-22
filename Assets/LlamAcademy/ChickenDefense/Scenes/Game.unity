@@ -241,7 +241,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &41118591
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1134,7 +1134,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &378637632
 Transform:
   m_ObjectHideFlags: 0
@@ -2250,7 +2250,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &773911003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27678,6 +27678,107 @@ MonoBehaviour:
   m_Bidirectional: 1
   m_AutoUpdatePosition: 0
   m_Area: 2
+--- !u!1 &1425407381
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1425407385}
+  - component: {fileID: 1425407384}
+  - component: {fileID: 1425407383}
+  - component: {fileID: 1425407382}
+  m_Layer: 0
+  m_Name: Player
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1425407382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1425407381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aaec1edac9e74474adcf15a6ecd50c36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CameraMoveConfig:
+    BottomSafePercentage: 0.1
+    EnableEdgePan: 1
+    MousePanSpeed: 5
+    EdgePanWidth: 50
+    KeyboardPanSpeed: 10
+  VirtualCameraTarget: {fileID: 855074658}
+  PlacementLayers:
+    serializedVersion: 2
+    m_Bits: 1024
+  Camera: {fileID: 1895156702}
+--- !u!114 &1425407383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1425407381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47b0dd5d106c4e5b86cc518a42d2d21e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CameraConfig:
+    BottomSafePercentage: 0.1
+    EnableEdgePan: 1
+    MousePanSpeed: 5
+    EdgePanWidth: 50
+    KeyboardPanSpeed: 10
+  VirtualCameraTarget: {fileID: 855074658}
+  SelectionBox: {fileID: 263038165}
+  MouseDragDelay: 0.1
+  ClickIcon: {fileID: 147494738}
+  SelectableLayers:
+    serializedVersion: 2
+    m_Bits: 128
+  CommandTargetLayers:
+    serializedVersion: 2
+    m_Bits: 1536
+  Camera: {fileID: 1895156702}
+  AliveUnits: []
+--- !u!114 &1425407384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1425407381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c589b91203bf4ae790af665990edb5f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InputHandlers: []
+  DefaultTarget: 0
+--- !u!4 &1425407385
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1425407381}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 30.320562, y: 6.42755, z: -56.94796}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1441884200
 GameObject:
   m_ObjectHideFlags: 0
@@ -29756,7 +29857,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1843731366}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4331887, y: -0.000000017947901, z: 0.000000008626207, w: 0.90130323}
+  m_LocalRotation: {x: 0.4331887, y: 0.0000000111261675, z: -0.000000005347511, w: 0.9013033}
   m_LocalPosition: {x: -2.57, y: 10.5, z: -2.92}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -29829,9 +29930,6 @@ GameObject:
   - component: {fileID: 1895156701}
   - component: {fileID: 1895156705}
   - component: {fileID: 1895156704}
-  - component: {fileID: 1895156708}
-  - component: {fileID: 1895156706}
-  - component: {fileID: 1895156707}
   - component: {fileID: 1895156709}
   m_Layer: 0
   m_Name: Main Camera
@@ -29907,7 +30005,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1895156700}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4331887, y: -0.000000017947901, z: 0.000000008626207, w: 0.90130323}
+  m_LocalRotation: {x: 0.4331887, y: 0.0000000111261675, z: -0.000000005347511, w: 0.9013033}
   m_LocalPosition: {x: -2.57, y: 10.5, z: -2.92}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -29992,71 +30090,6 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
---- !u!114 &1895156706
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1895156700}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47b0dd5d106c4e5b86cc518a42d2d21e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CameraConfig:
-    BottomSafePercentage: 0.1
-    EnableEdgePan: 1
-    MousePanSpeed: 5
-    EdgePanWidth: 50
-    KeyboardPanSpeed: 10
-  VirtualCameraTarget: {fileID: 855074658}
-  SelectionBox: {fileID: 263038165}
-  MouseDragDelay: 0.1
-  ClickIcon: {fileID: 147494738}
-  SelectableLayers:
-    serializedVersion: 2
-    m_Bits: 128
-  CommandTargetLayers:
-    serializedVersion: 2
-    m_Bits: 1536
-  AliveUnits: []
---- !u!114 &1895156707
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1895156700}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aaec1edac9e74474adcf15a6ecd50c36, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CameraMoveConfig:
-    BottomSafePercentage: 0.1
-    EnableEdgePan: 1
-    MousePanSpeed: 5
-    EdgePanWidth: 50
-    KeyboardPanSpeed: 10
-  VirtualCameraTarget: {fileID: 855074658}
-  PlacementLayers:
-    serializedVersion: 2
-    m_Bits: 1024
---- !u!114 &1895156708
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1895156700}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c589b91203bf4ae790af665990edb5f3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  InputHandlers: []
-  DefaultTarget: 0
 --- !u!114 &1895156709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32229,6 +32262,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6b1b2dc2d0f49e790e0fbec21616664, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ObjectsToActivateOnPlay:
+  - {fileID: 773911002}
+  - {fileID: 1425407381}
+  - {fileID: 41118590}
+  - {fileID: 378637631}
   MinimapCamera: {fileID: 773911005}
   VirtualCameraTarget: {fileID: 855074659}
   ResourceCost: {fileID: 11400000, guid: cf0e5bf289579b845aac43ae50fc39d9, type: 2}
@@ -32422,6 +32460,7 @@ SceneRoots:
   - {fileID: 2087680581}
   - {fileID: 607587647}
   - {fileID: 1761105110}
+  - {fileID: 1425407385}
   - {fileID: 1895156703}
   - {fileID: 1843731368}
   - {fileID: 855074659}

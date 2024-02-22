@@ -1,0 +1,73 @@
+#main-menu.unity-disabled {
+    opacity: 0;
+    transition: opacity 250ms ease-in, scale 0ms linear 251ms;
+    scale: 0;
+}
+#main-menu {
+    opacity: 1;
+    transition: opacity 250ms ease-in;
+}
+
+Button {
+    border-radius: 10px;
+    background-color: #AC5700;
+    color: white;
+    font-size: 24px;
+    transition: background-color 125ms ease-out, font-size 125ms ease-out;
+}
+
+Button:hover, Button:active, Button:focus {
+    background-color: #ff6c00;
+    font-size: 30;
+    transition: background-color 125ms ease-out, font-size 125ms ease-out;
+}
+
+#exit, #close-popup {
+    background-color: #c60000;
+}
+
+#exit:hover, #exit:active, #exit:focus, 
+#close-popup:hover, #close-popup:active, #close-popup:focus {
+    background-color: #ff0000;
+}
+
+#get-code, #about {
+    background-color: #666666;
+    color: #ffffff;
+}
+
+#get-code:hover, #get-code:active, #get-code:focus, 
+#about:hover, #about:active, #about:focus { 
+    background-color: #333333;
+}
+
+#chicken.active {
+    scale: 1;
+    transition: scale 250ms ease-out 500ms;
+}
+
+#defense.active {
+    scale: 1;
+    transition: scale 250ms ease-out 1000ms;
+}
+
+#chicken {
+    scale: 0;
+    transition: scale 250ms ease-out 500ms;
+}
+
+#defense {
+    scale: 0;
+    transition: scale 250ms ease-out 1000ms;
+}
+
+#popup {
+    scale: 1;
+    opacity: 1;
+    transition: opacity 250ms ease-in;
+}
+#popup.unity-disabled {
+    scale: 0;
+    opacity: 0;
+    transition: opacity 250ms ease-in;
+}

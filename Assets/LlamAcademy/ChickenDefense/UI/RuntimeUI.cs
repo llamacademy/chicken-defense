@@ -15,6 +15,7 @@ namespace LlamAcademy.ChickenDefense.UI
     [RequireComponent(typeof(UIDocument))]
     public class RuntimeUI : MonoBehaviour
     {
+        [SerializeField] private GameObject[] ObjectsToActivateOnPlay;
         [SerializeField] private Camera MinimapCamera;
         [SerializeField] private Transform VirtualCameraTarget;
         [SerializeField] private ResourceCostSO ResourceCost;
@@ -41,6 +42,18 @@ namespace LlamAcademy.ChickenDefense.UI
         {
             UI = GetComponent<UIDocument>();
 
+            VisualElement root = UI.rootVisualElement.Q("root");
+            VisualElement runtimeUI = UI.rootVisualElement.Q("runtime-ui");
+            runtimeUI.SetEnabled(false);
+            MainMenu mainMenu = new (ObjectsToActivateOnPlay, () =>
+            {
+                MainMenu menu = root.Q<MainMenu>();
+                menu.RemoveFromClassList("maximize");
+                menu.SetEnabled(false);
+            });
+            mainMenu.AddToClassList("maximize");
+            root.Add(mainMenu);
+            
             SetupMinimapClickConfig();
             BuildUnitUI();
             BuildPopulationAndResourceUI();

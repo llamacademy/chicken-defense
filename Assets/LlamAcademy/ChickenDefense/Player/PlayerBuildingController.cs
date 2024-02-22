@@ -12,15 +12,14 @@ using Random = UnityEngine.Random;
 
 namespace LlamAcademy.ChickenDefense.Player
 {
-    [RequireComponent(typeof(Camera))]
     public class PlayerBuildingController : MonoBehaviour
     {
         [SerializeField] private CameraMoveConfig CameraMoveConfig;
         [SerializeField] private Rigidbody VirtualCameraTarget;
         [SerializeField] private LayerMask PlacementLayers;
-
+        [SerializeField] private Camera Camera;
+        
         private GameObject PlacementGhost;
-        private Camera Camera;
         private UnitSO ActiveUnit;
 
         private EventBinding<UnitSelectedToPlaceEvent> UnitSelectedEventBinding;
@@ -34,7 +33,6 @@ namespace LlamAcademy.ChickenDefense.Player
 
         private void Awake()
         {
-            Camera = GetComponent<Camera>();
             UnitSelectedEventBinding = new EventBinding<UnitSelectedToPlaceEvent>(HandleUnitSelected);
             Bus<UnitSelectedToPlaceEvent>.Register(UnitSelectedEventBinding);
 

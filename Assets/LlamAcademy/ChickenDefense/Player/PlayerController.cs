@@ -10,7 +10,6 @@ using UnityEngine.InputSystem;
 namespace LlamAcademy.ChickenDefense.Player
 {
     [DefaultExecutionOrder(1)]
-    [RequireComponent(typeof(Camera))]
     public class PlayerController : MonoBehaviour
     {
         [Header("Camera Configuration")] 
@@ -26,6 +25,7 @@ namespace LlamAcademy.ChickenDefense.Player
         [SerializeField] private LayerMask SelectableLayers;
         [SerializeField] private LayerMask CommandTargetLayers;
 
+        [SerializeField]
         private Camera Camera;
 
         private Vector2 StartMousePosition;
@@ -35,7 +35,6 @@ namespace LlamAcademy.ChickenDefense.Player
         private HashSet<AbstractUnit> SelectedUnits = new(12);
         private HashSet<AbstractUnit> AddedUnits = new(12);
         private HashSet<AbstractUnit> RemovedUnits = new(12);
-        private List<RaycastResult> RaycastResults = new();
 
         private EventBinding<UnitSpawnEvent> UnitSpawnEventBinding;
         private EventBinding<UnitDeathEvent> UnitDeathEventBinding;
@@ -43,8 +42,6 @@ namespace LlamAcademy.ChickenDefense.Player
 
         private void Awake()
         {
-            Camera = GetComponent<Camera>();
-
             UnitSpawnEventBinding = new EventBinding<UnitSpawnEvent>(OnUnitSpawn);
             UnitDeathEventBinding = new EventBinding<UnitDeathEvent>(OnUnitDeath);
             Bus<UnitSpawnEvent>.Register(UnitSpawnEventBinding);
