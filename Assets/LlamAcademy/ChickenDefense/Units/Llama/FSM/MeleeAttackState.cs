@@ -71,6 +71,7 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.FSM
             float speed = Mathf.Max(normalAnimationSpeed / Unit.Unit.AttackConfig.AttackSpeed, 1); // do not go below 1 speed
             
             constraint.data.target.localPosition = targetPosition;
+            bool appliedDamage = false;
             float time = 0;
             while (time < 1)
             {
@@ -83,10 +84,11 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.FSM
 
                 time += Time.deltaTime * speed;
 
-                if (time > 0.5f)
+                if (time > 0.5f && !appliedDamage)
                 {
                     Damageable.TakeDamage(Unit.Unit.AttackConfig.Damage, Unit);
-                
+                    appliedDamage = true;
+
                 }
                 yield return null;
             }

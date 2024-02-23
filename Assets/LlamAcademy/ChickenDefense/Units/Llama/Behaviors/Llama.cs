@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using LlamAcademy.ChickenDefense.EventBus;
+using LlamAcademy.ChickenDefense.Events;
 using LlamAcademy.ChickenDefense.Units.FSM.Common;
 using LlamAcademy.ChickenDefense.Units.FSM.Sensors;
 using LlamAcademy.ChickenDefense.Units.Llama.FSM;
@@ -33,6 +35,8 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.Behaviors
             AddAttackStates();
             AddAttackTransitions();
             base.Awake();
+            
+            Bus<UnitDeathEvent>.Register(new EventBinding<UnitDeathEvent>(HandleEnemyDeath));
         }
 
         private void Start()
@@ -124,6 +128,14 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.Behaviors
                 Target = TransformTarget.position;
                 TransformTarget = null;
                 FSM.Trigger(StateEvent.MoveIssued);
+            }
+        }
+
+        private void HandleEnemyDeath(UnitDeathEvent evt)
+        {
+            if (evt.Unit.transform == TransformTarget)
+            {
+                OnTargetExitRadius(evt.Unit.transform);
             }
         }
 

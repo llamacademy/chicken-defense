@@ -1166,10 +1166,10 @@ MonoBehaviour:
   EggPrefab: {fileID: -2707395637519825111, guid: dd8ab7067ba9f3f409d236ee4ae95fea,
     type: 3}
   <InitialChickens>k__BackingField: 10
-  SpawnRate: 10
+  SpawnRate: 15
   ChickenSurface: {fileID: 1917502156}
   MaxChickens: 20
-  InitialEggs: 11
+  InitialEggs: 10
 --- !u!1 &533465039
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57f2f717068346fbaf05a21b62f88c69, type: 3}
   m_Name: Snake
   m_EditorClassIdentifier: 
-  Health: 100
-  UIIcon: {fileID: 0}
+  Health: 7
+  UIIcon: {fileID: 2800000, guid: 6ca0cc8ef41e5c34d9235ddbd608ab1c, type: 3}
   Prefab: {fileID: 8821808129739119308, guid: 900a3894a97585e4dbe416552aaee14c, type: 3}
   PlacementGhostPrefab: {fileID: 0}
   ResourceCost: {fileID: 0}

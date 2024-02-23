@@ -18,7 +18,7 @@ MonoBehaviour:
   AngularSpeed: 360
   Acceleration: 3
   StoppingDistance: 0.5
-  Radius: 1
+  Radius: 0.5
   Height: 2
   ObstacleAvoidanceType: 4
   AvoidancePriority: 50

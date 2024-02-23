@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57f2f717068346fbaf05a21b62f88c69, type: 3}
   m_Name: Fox
   m_EditorClassIdentifier: 
-  Health: 150
-  UIIcon: {fileID: 0}
+  Health: 10
+  UIIcon: {fileID: 2800000, guid: d24e13d66fbeec94d80e4be42ec7cce9, type: 3}
   Prefab: {fileID: 7804548639962236038, guid: faf9a3117c19b6f44859535e0e1ab8b7, type: 3}
   PlacementGhostPrefab: {fileID: 0}
   ResourceCost: {fileID: 0}

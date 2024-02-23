@@ -14,7 +14,7 @@ namespace LlamAcademy.ChickenDefense.UI.Screens
         private Button PlayAgainButton => this.Q<Button>("play-game");
         private Label ScoreLabel => this.Q<Label>("score");
 
-        private const string TIME_FORMAT = "[-][d.]hh:mm:ss";
+        private const string TIME_FORMAT = @"hh\:mm\:ss";
         public EndGameScreen(float totalElapsedTime, Difficulty difficulty)
         {
             Setup(totalElapsedTime, difficulty);
@@ -32,7 +32,7 @@ namespace LlamAcademy.ChickenDefense.UI.Screens
                 highScore = totalElapsedTime;
             }
             TimeSpan timeSpan = TimeSpan.FromSeconds(totalElapsedTime);
-            ScoreLabel.text = $"You lasted <b><color=#ff6c00>{timeSpan:TIME_FORMAT}</color></b>!\r\nHigh Score: {TimeSpan.FromSeconds(highScore):TIME_FORMAT}\r\nPlay Again?";
+            ScoreLabel.text = $"You lasted <b><color=#ff6c00>{timeSpan.ToString(TIME_FORMAT)}</color></b>!\r\nHigh Score: <b><color=#ff6c00>{TimeSpan.FromSeconds(highScore).ToString(TIME_FORMAT)}</color></b>\r\nDare to try again?";
             
             PlayAgainButton.RegisterCallback<ClickEvent>(PlayAgain);
         }

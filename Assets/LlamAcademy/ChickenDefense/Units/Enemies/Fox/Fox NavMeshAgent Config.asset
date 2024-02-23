@@ -20,5 +20,5 @@ MonoBehaviour:
   StoppingDistance: 0.5
   Radius: 0.25
   Height: 2
-  ObstacleAvoidanceType: 4
+  ObstacleAvoidanceType: 0
   AvoidancePriority: 4

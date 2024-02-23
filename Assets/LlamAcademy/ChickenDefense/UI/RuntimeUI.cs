@@ -107,6 +107,7 @@ namespace LlamAcademy.ChickenDefense.UI
             RuntimeUIElement.AddToClassList("disabled");
 
             EndGameScreen endGameScreen = new(Time.time - StartTime, Difficulty);
+            endGameScreen.AddToClassList("maximize");
             UI.rootVisualElement.Add(endGameScreen);
         }
 

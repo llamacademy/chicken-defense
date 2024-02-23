@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f6894b74c7f4ef3ab47eb62ac3b3506, type: 3}
   m_Name: Fox Run Away Config
   m_EditorClassIdentifier: 
-  RunCompletelyAwayDistance: {x: 7, y: 4}
+  RunCompletelyAwayDistance: {x: 6, y: 4}
   SpeedMultiplier: 2

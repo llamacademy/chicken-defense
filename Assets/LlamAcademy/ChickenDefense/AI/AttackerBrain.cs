@@ -265,7 +265,7 @@ namespace LlamAcademy.ChickenDefense.AI
                 float currentPathDistance = 0;
                 float pathToNewEggDistance = 0;
 
-                // great jobs system opportunity here
+                // Challenge: Convert to jobs system for better performance!
                 foreach (Snake snake in AliveSnakes)
                 {
                     NavMeshPath path = new();
