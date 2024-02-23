@@ -2,7 +2,6 @@ using System;
 using LlamAcademy.ChickenDefense.AI;
 using LlamAcademy.ChickenDefense.EventBus;
 using LlamAcademy.ChickenDefense.Events;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -45,9 +44,7 @@ namespace LlamAcademy.ChickenDefense.UI.Screens
         public void Setup(GameObject[] objectsToActivateOnPlay)
         {
             ObjectsToActivateOnPlay = objectsToActivateOnPlay;
-            VisualTreeAsset asset =
-                AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(
-                    "Assets/LlamAcademy/ChickenDefense/UI/Screens/MainMenu.uxml");
+            VisualTreeAsset asset = Resources.Load<VisualTreeAsset>("UI/MainMenu");
             asset.CloneTree(this);
 
             // delay invoking adding the class so the transition plays

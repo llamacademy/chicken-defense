@@ -1,5 +1,5 @@
 using LlamAcademy.ChickenDefense.Units;
-using UnityEditor;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace LlamAcademy.ChickenDefense.UI.Components
@@ -21,7 +21,7 @@ namespace LlamAcademy.ChickenDefense.UI.Components
 
         public void Setup(UnitSO unit)
         {
-            VisualTreeAsset asset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/LlamAcademy/ChickenDefense/UI/Components/UnitIcon.uxml");
+            VisualTreeAsset asset = Resources.Load<VisualTreeAsset>("UI/UnitIcon");
             asset.CloneTree(this);
             Icon.style.backgroundImage = new StyleBackground(unit.UIIcon);
             LabeledIcon label = new(unit.ResourceCost.Icon, unit.ResourceCost.Cost.ToString());

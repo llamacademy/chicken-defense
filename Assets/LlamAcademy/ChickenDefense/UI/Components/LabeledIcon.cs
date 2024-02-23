@@ -1,4 +1,3 @@
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -28,8 +27,7 @@ namespace LlamAcademy.ChickenDefense.UI.Components
         private void LoadAsset()
         {
             VisualTreeAsset asset =
-                AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(
-                    "Assets/LlamAcademy/ChickenDefense/UI/Components/LabeledIcon.uxml");
+                Resources.Load<VisualTreeAsset>("UI/LabeledIcon");
             asset.CloneTree(this);
         }
 

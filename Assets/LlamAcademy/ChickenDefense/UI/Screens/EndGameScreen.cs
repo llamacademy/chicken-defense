@@ -1,6 +1,5 @@
 using System;
 using LlamAcademy.ChickenDefense.AI;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -23,7 +22,7 @@ namespace LlamAcademy.ChickenDefense.UI.Screens
 
         public void Setup(float totalElapsedTime, Difficulty difficulty)
         {
-            VisualTreeAsset asset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/LlamAcademy/ChickenDefense/UI/Screens/EndGameScreen.uxml");
+            VisualTreeAsset asset = Resources.Load<VisualTreeAsset>("UI/EndGameScreen");
             asset.CloneTree(this);
 
             float highScore = PlayerPrefs.GetFloat(difficulty.ToString());
