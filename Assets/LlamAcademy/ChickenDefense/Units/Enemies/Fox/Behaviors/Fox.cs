@@ -1,4 +1,3 @@
-using LlamAcademy.ChickenDefense.Units.Enemies;
 using LlamAcademy.ChickenDefense.Units.Enemies.FSM.Common;
 using LlamAcademy.ChickenDefense.Units.FSM.Common;
 using UnityEngine;
@@ -6,7 +5,7 @@ using UnityEngine.AI;
 using UnityHFSM;
 using ChickenUnit = LlamAcademy.ChickenDefense.Units.Chicken.Behaviors.Chicken;
 
-namespace LlamAcademy.ChickenDefense.Units.Fox
+namespace LlamAcademy.ChickenDefense.Units.Enemies.Fox.Behaviors
 {
     // This is mostly copy/paste from Snake, so probably possible to group more behaviors into EnemyBase.
     // I intentionally did not do this so it is possible to have more diverse enemies more easily without having to rip

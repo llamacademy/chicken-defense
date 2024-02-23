@@ -22,8 +22,8 @@ MonoBehaviour:
     Intensity: 0.5
     DirectLightingStrength: 0.25
     Radius: 0.25
-    Samples: 0
-    BlurQuality: 0
+    Samples: 2
+    BlurQuality: 2
     Falloff: 100
     SampleCount: -1
   m_BlueNoise256Textures:
@@ -92,11 +92,11 @@ MonoBehaviour:
     failOperation: 0
     zFailOperation: 0
   m_ShadowTransparentReceive: 1
-  m_RenderingMode: 1
-  m_DepthPrimingMode: 2
+  m_RenderingMode: 2
+  m_DepthPrimingMode: 0
   m_CopyDepthMode: 0
   m_AccurateGbufferNormals: 0
-  m_IntermediateTextureMode: 1
+  m_IntermediateTextureMode: 0
 --- !u!114 &653085142619871783
 MonoBehaviour:
   m_ObjectHideFlags: 0

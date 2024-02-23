@@ -20,10 +20,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c40be3174f62c4acf8c1216858c64956, type: 2}
   - {fileID: 11400000, guid: 707360a9c581a4bd7aa53bfeb1429f71, type: 2}
   m_DefaultRendererIndex: 0
-  m_RequireDepthTexture: 1
-  m_RequireOpaqueTexture: 1
+  m_RequireDepthTexture: 0
+  m_RequireOpaqueTexture: 0
   m_OpaqueDownsampling: 0
-  m_SupportsTerrainHoles: 1
+  m_SupportsTerrainHoles: 0
   m_SupportsHDR: 1
   m_HDRColorBufferPrecision: 0
   m_MSAA: 1
@@ -46,16 +46,16 @@ MonoBehaviour:
   m_AdditionalLightsShadowResolutionTierHigh: 512
   m_ReflectionProbeBlending: 1
   m_ReflectionProbeBoxProjection: 1
-  m_ShadowDistance: 150
+  m_ShadowDistance: 45
   m_ShadowCascadeCount: 4
   m_Cascade2Split: 0.25
   m_Cascade3Split: {x: 0.1, y: 0.3}
-  m_Cascade4Split: {x: 0.2, y: 0.4, z: 0.6}
-  m_CascadeBorder: 0.1
+  m_Cascade4Split: {x: 0.11111111, y: 0.22222222, z: 0.44444445}
+  m_CascadeBorder: 0.19999999
   m_ShadowDepthBias: 0
   m_ShadowNormalBias: 0
   m_AnyShadowsSupported: 1
-  m_SoftShadowsSupported: 1
+  m_SoftShadowsSupported: 0
   m_ConservativeEnclosingSphere: 0
   m_NumIterationsEnclosingSphere: 64
   m_SoftShadowQuality: 3
@@ -84,11 +84,11 @@ MonoBehaviour:
     blueNoise64LTex: {fileID: 2800000, guid: e3d24661c1e055f45a7560c033dbb837, type: 3}
     bayerMatrixTex: {fileID: 2800000, guid: f9ee4ed84c1d10c49aabb9b210b0fc44, type: 3}
   m_PrefilteringModeMainLightShadows: 3
-  m_PrefilteringModeAdditionalLight: 4
+  m_PrefilteringModeAdditionalLight: 0
   m_PrefilteringModeAdditionalLightShadows: 2
   m_PrefilterXRKeywords: 1
-  m_PrefilteringModeForwardPlus: 1
-  m_PrefilteringModeDeferredRendering: 1
+  m_PrefilteringModeForwardPlus: 2
+  m_PrefilteringModeDeferredRendering: 0
   m_PrefilteringModeScreenSpaceOcclusion: 1
   m_PrefilterDebugKeywords: 1
   m_PrefilterWriteRenderingLayers: 0
@@ -99,12 +99,12 @@ MonoBehaviour:
   m_PrefilterSSAOSourceDepthHigh: 1
   m_PrefilterSSAOInterleaved: 0
   m_PrefilterSSAOBlueNoise: 1
-  m_PrefilterSSAOSampleCountLow: 1
+  m_PrefilterSSAOSampleCountLow: 0
   m_PrefilterSSAOSampleCountMedium: 1
-  m_PrefilterSSAOSampleCountHigh: 0
+  m_PrefilterSSAOSampleCountHigh: 1
   m_PrefilterDBufferMRT1: 1
   m_PrefilterDBufferMRT2: 1
-  m_PrefilterDBufferMRT3: 0
+  m_PrefilterDBufferMRT3: 1
   m_PrefilterSoftShadowsQualityLow: 1
   m_PrefilterSoftShadowsQualityMedium: 1
   m_PrefilterSoftShadowsQualityHigh: 1

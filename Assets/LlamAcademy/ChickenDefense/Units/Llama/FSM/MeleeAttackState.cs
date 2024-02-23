@@ -51,6 +51,7 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.FSM
                     (Unit.TransformTarget.position - Unit.transform.position).normalized);
                 
                 Unit.TransformTarget.GetComponent<EnemyBase>().GetAttacked();
+                Damageable = Unit.TransformTarget.GetComponent<IDamageable>();
                 
                 if (dot < 0)
                 {
