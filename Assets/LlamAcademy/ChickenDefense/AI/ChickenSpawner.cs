@@ -16,7 +16,7 @@ namespace LlamAcademy.ChickenDefense.AI
     {
         [SerializeField] private UnitSO Chicken;
         [SerializeField] private Egg EggPrefab;
-        [SerializeField] [Range(5, 15)] private int InitialChickens = 10;
+        [field: SerializeField] [field: Range(5, 15)] public int InitialChickens { get; private set; } = 10;
         [SerializeField] [Range(5, 60)] private float SpawnRate = 5f;
         [SerializeField] private NavMeshSurface ChickenSurface;
         [SerializeField] [Range(5, 20)] private int MaxChickens = 20;
@@ -27,15 +27,6 @@ namespace LlamAcademy.ChickenDefense.AI
 
         private EventBinding<UnitSpawnEvent> UnitSpawnEventBinding;
         private EventBinding<UnitDeathEvent> UnitDeathEventBinding;
-
-        private void Awake()
-        {
-            ChickenPool = new ObjectPool<Chicken>(() => Instantiate(Chicken.Prefab).GetComponent<Chicken>());
-            UnitSpawnEventBinding = new EventBinding<UnitSpawnEvent>(OnUnitSpawn);
-            UnitDeathEventBinding = new EventBinding<UnitDeathEvent>(OnUnitDeath);
-            Bus<UnitSpawnEvent>.Register(UnitSpawnEventBinding);
-            Bus<UnitDeathEvent>.Register(UnitDeathEventBinding);
-        }
 
         private void OnUnitSpawn(UnitSpawnEvent @event)
         {
@@ -51,15 +42,21 @@ namespace LlamAcademy.ChickenDefense.AI
             {
                 AliveChickens--;
             }
+
+            if (AliveChickens == 0)
+            {
+                Bus<GameOverEvent>.Raise(new GameOverEvent());
+            }
         }
 
         private void Start()
         {
-            for (int i = 0; i < InitialChickens; i++)
+            // remove any eggs spawned by chickens during main menu
+            foreach(Egg egg in FindObjectsOfType<Egg>())
             {
-                SpawnChicken();
+                egg.gameObject.SetActive(false);
             }
-
+            
             for (int i = 0; i < InitialEggs; i++)
             {
                 SpawnEgg();
@@ -81,8 +78,22 @@ namespace LlamAcademy.ChickenDefense.AI
             }
         }
 
-        private void SpawnChicken()
+        private void SetupEventBindings()
         {
+            UnitSpawnEventBinding = new EventBinding<UnitSpawnEvent>(OnUnitSpawn);
+            UnitDeathEventBinding = new EventBinding<UnitDeathEvent>(OnUnitDeath);
+            Bus<UnitSpawnEvent>.Register(UnitSpawnEventBinding);
+            Bus<UnitDeathEvent>.Register(UnitDeathEventBinding);
+        }
+
+        public void SpawnChicken()
+        {
+            ChickenPool ??= new ObjectPool<Chicken>(() => Instantiate(Chicken.Prefab).GetComponent<Chicken>());
+            if (UnitSpawnEventBinding == null)
+            {
+                SetupEventBindings();
+            }
+
             Chicken chicken = ChickenPool.Get();
 
             Vector3 position = new(
@@ -104,7 +115,7 @@ namespace LlamAcademy.ChickenDefense.AI
 
         private void SpawnEgg()
         {
-            Vector3 spawnLocation = new (
+            Vector3 spawnLocation = new(
                 Random.Range(ChickenCoop.CoopBounds.min.x, ChickenCoop.CoopBounds.max.x),
                 ChickenCoop.CoopBounds.min.y,
                 Random.Range(ChickenCoop.CoopBounds.min.z, ChickenCoop.CoopBounds.max.z)

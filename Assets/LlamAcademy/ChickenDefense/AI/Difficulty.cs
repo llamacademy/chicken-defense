@@ -5,7 +5,7 @@ namespace LlamAcademy.ChickenDefense.AI
         Easy = 1,
         Normal = 2,
         Hard = 3,
-        Extreme = 4,
-        Insane = 5
+        Extreme = 4
+        // Insane = 5
     }
 }

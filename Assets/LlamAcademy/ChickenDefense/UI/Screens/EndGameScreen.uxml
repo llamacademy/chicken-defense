@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/LlamAcademy/ChickenDefense/UI/Screens/EndGameScreen.uss?fileID=7433441132597879392&amp;guid=b39829db90e5a21449603c6e9f24eeb5&amp;type=3#EndGameScreen" />
+    <Style src="project://database/Assets/LlamAcademy/ChickenDefense/UI/Screens/MainMenu.uss?fileID=7433441132597879392&amp;guid=08808a50aced4ee4d9bdf1cefdc139c5&amp;type=3#MainMenu" />
+    <ui:VisualElement name="root" style="flex-grow: 1; align-items: center;">
+        <ui:VisualElement style="flex-grow: 1; align-self: center; align-items: center; justify-content: center;">
+            <ui:Label tabindex="-1" text="Game Over!" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 48px; color: rgb(255, 255, 255);" />
+            <ui:Label tabindex="-1" text="You lasted {0}:{0}!" parse-escape-sequences="true" display-tooltip-when-elided="true" name="score" style="font-size: 24px; color: rgb(255, 255, 255);" />
+            <ui:Button text="Main Menu" parse-escape-sequences="true" display-tooltip-when-elided="true" name="play-game" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

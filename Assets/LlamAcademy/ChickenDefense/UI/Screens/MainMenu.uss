@@ -1,0 +1,157 @@
+:root {
+    --primary: rgb(221, 91, 0);
+    --primary-hover: rgb(255, 108, 0);
+    --error: rgb(221, 0, 0);
+    --error-hover: rgb(255, 0, 0);
+    --light-grey: rgb(204, 204, 204);
+    --light-grey-hover: rgb(170, 170, 170);
+    --dark: rgb(0, 0, 0);
+}
+
+#main-menu.unity-disabled {
+    opacity: 0;
+    transition: opacity 250ms ease-in, scale 0ms linear 251ms;
+    scale: 0;
+}
+
+#main-menu {
+    opacity: 1;
+    transition: opacity 250ms ease-in;
+}
+
+Button {
+    border-radius: 10px;
+    background-color: var(--primary-hover);
+    color: white;
+    font-size: 24px;
+    transition: background-color 125ms ease-in, font-size 125ms ease-in;
+    margin-bottom: 12px;
+}
+
+Button:hover {
+    background-color: var(--primary-hover);
+    font-size: 30;
+    transition: background-color 125ms ease-out, font-size 125ms ease-out;
+}
+
+Button:active {
+    background-color: var(--primary-hover);
+    font-size: 30;
+    transition: background-color 125ms ease-out, font-size 125ms ease-out;
+}
+
+Button:focus {
+    background-color: var(--primary-hover);
+    font-size: 30;
+    transition: background-color 125ms ease-out, font-size 125ms ease-out;
+}
+
+#exit {
+    background-color: var(--error);
+}
+
+#close-popup {
+    background-color: var(--error);
+}
+
+#exit:hover {
+    background-color: var(--error-hover);
+}
+
+#exit:active {
+    background-color: var(--error-hover);
+}
+
+#exit:focus {
+    background-color: var(--error-hover);
+}
+
+#close-popup:hover {
+    background-color: var(--error-hover);
+}
+
+#close-popup:active {
+    background-color: var(--error-hover);
+}
+
+#close-popup:focus {
+    background-color: var(--error-hover);
+}
+
+#get-code {
+    background-color: var(--light-grey);
+    color: rgb(0, 0, 0);
+}
+
+#about {
+    background-color: var(--light-grey);
+    color: rgb(0, 0, 0);
+}
+
+#difficulty {
+    background-color: var(--light-grey);
+    color: rgb(0, 0, 0);
+}
+
+#get-code:hover {
+    background-color: var(--light-grey-hover);
+}
+
+#get-code:active {
+    background-color: var(--light-grey-hover);
+}
+
+#get-code:focus {
+    background-color: var(--light-grey-hover);
+}
+
+#about:hover {
+    background-color: var(--light-grey-hover);
+}
+
+#about:active {
+    background-color: var(--light-grey-hover);
+}
+
+#about:focus {
+    background-color: var(--light-grey-hover);
+}
+
+#chicken.active {
+    scale: 1;
+    transition: scale 250ms ease-in 500ms;
+}
+
+#defense.active {
+    scale: 1;
+    transition: scale 250ms ease-in 1000ms;
+}
+
+#chicken {
+    scale: 0;
+    transition: scale 250ms ease-out 500ms;
+}
+
+#defense {
+    scale: 0;
+    transition: scale 250ms ease-out 1000ms;
+}
+
+#popup {
+    scale: 1;
+    opacity: 1;
+    transition: opacity 250ms ease-in;
+}
+
+#popup.unity-disabled {
+    scale: 0;
+    opacity: 0;
+    transition: opacity 250ms ease-in;
+}
+
+#difficulty {
+    padding: 5px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+    font-size: 20px;
+}

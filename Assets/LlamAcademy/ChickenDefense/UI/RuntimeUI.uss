@@ -24,7 +24,7 @@
     right: 0;
 }
 
-.unity-disabled {
+.disabled {
     transition: scale 0ms linear 250ms;
     scale: 0;
 }

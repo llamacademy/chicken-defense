@@ -9,6 +9,7 @@ using Random = UnityEngine.Random;
 
 namespace LlamAcademy.ChickenDefense.Units.Chicken.Behaviors
 {
+    [RequireComponent(typeof(AudioSource))]
     public class Chicken : UnitBase<ChickenStates>
     {
         [SerializeField] private Egg EggPrefab;
@@ -16,9 +17,14 @@ namespace LlamAcademy.ChickenDefense.Units.Chicken.Behaviors
         [SerializeField] public float Hunger;
         [SerializeField] private Vector2 LayEggRange = new(5, 7);
         [SerializeField] private Vector2 MaxHungerRange = new(7, 12);
+        [SerializeField] private Vector2 RandomSoundRange = new(5, 12);
+        [SerializeField] private AudioClip[] Sounds;
+        private AudioSource AudioSource;
         private float MaxHunger;
         private float LayEggDelay;
         private float LastEggTime;
+        private float SoundDelay;
+        private float LastSoundTime;
 
         private static ObjectPool<Egg> EggPool;
         public float HungerRegenerationRate { get; private set; }
@@ -27,9 +33,11 @@ namespace LlamAcademy.ChickenDefense.Units.Chicken.Behaviors
         {
             Agent = GetComponent<NavMeshAgent>();
             Animator = GetComponent<Animator>();
+            AudioSource = GetComponent<AudioSource>();
             HungerRegenerationRate = Random.Range(HungerRegenerationRange.x, HungerRegenerationRange.y);
             LayEggDelay = Random.Range(LayEggRange.x, LayEggRange.y);
             MaxHunger = Random.Range(MaxHungerRange.x, MaxHungerRange.y);
+            SoundDelay = Random.Range(RandomSoundRange.x, RandomSoundRange.y);
             PickTargetLocation();
             base.Awake();
         }
@@ -40,8 +48,21 @@ namespace LlamAcademy.ChickenDefense.Units.Chicken.Behaviors
             {
                 Hunger += Time.deltaTime;
             }
+            
+            if (LastSoundTime + SoundDelay < Time.time)
+            {
+                AudioSource.PlayOneShot(Sounds[Random.Range(0, Sounds.Length)]);
+                LastSoundTime = Time.time;
+                SoundDelay = Random.Range(RandomSoundRange.x, RandomSoundRange.y);
+            }
 
             base.Update();
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            LastSoundTime = Time.time - SoundDelay;
         }
 
         protected override void AddStates()

@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LlamAcademy.ChickenDefense.AI;
 using LlamAcademy.ChickenDefense.EventBus;
 using LlamAcademy.ChickenDefense.Events;
 using LlamAcademy.ChickenDefense.Player;
 using LlamAcademy.ChickenDefense.UI.Components;
+using LlamAcademy.ChickenDefense.UI.Screens;
 using LlamAcademy.ChickenDefense.Units;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -26,50 +28,60 @@ namespace LlamAcademy.ChickenDefense.UI
         private LabeledIcon Resources;
         private VisualElement UnitContainer;
         private VisualElement Minimap;
-        
+        private VisualElement RuntimeUIElement;
+
         private List<UnitPopulationLabeledIcon> PopulationLabeledIcons = new();
 
         private int CurrentEggs;
         private bool MouseDownOnMinimap;
         private LayerMask FloorLayer;
-        
+
         private EventBinding<UnitSpawnEvent> SpawnEventBinding;
         private EventBinding<UnitDeathEvent> DieEventBinding;
         private EventBinding<EggSpawnEvent> EggSpawnBinding;
         private EventBinding<EggRemovedEvent> LostEggBinding;
-        
+        private EventBinding<GameOverEvent> GameOverEventBinding;
+
+        private float StartTime;
+        private Difficulty Difficulty;
+
         private void Awake()
         {
             UI = GetComponent<UIDocument>();
 
             VisualElement root = UI.rootVisualElement.Q("root");
-            VisualElement runtimeUI = UI.rootVisualElement.Q("runtime-ui");
-            runtimeUI.SetEnabled(false);
-            MainMenu mainMenu = new (ObjectsToActivateOnPlay, () =>
+            RuntimeUIElement = UI.rootVisualElement.Q("runtime-ui");
+            RuntimeUIElement.AddToClassList("disabled");
+            MainMenu mainMenu = new(ObjectsToActivateOnPlay, () =>
             {
                 MainMenu menu = root.Q<MainMenu>();
                 menu.RemoveFromClassList("maximize");
-                menu.SetEnabled(false);
+                menu.AddToClassList("disabled");
+                StartTime = Time.time;
+                Difficulty = menu.GameDifficulty;
             });
             mainMenu.AddToClassList("maximize");
             root.Add(mainMenu);
-            
+
             SetupMinimapClickConfig();
             BuildUnitUI();
             BuildPopulationAndResourceUI();
-        }
-
-        private void Start()
-        {
+            
             SpawnEventBinding = new EventBinding<UnitSpawnEvent>(OnSpawnUnit);
             DieEventBinding = new EventBinding<UnitDeathEvent>(OnUnitDeath);
             EggSpawnBinding = new EventBinding<EggSpawnEvent>(OnSpawnEgg);
             LostEggBinding = new EventBinding<EggRemovedEvent>(OnLoseEgg);
-            
             Bus<UnitSpawnEvent>.Register(SpawnEventBinding);
             Bus<UnitDeathEvent>.Register(DieEventBinding);
             Bus<EggSpawnEvent>.Register(EggSpawnBinding);
             Bus<EggRemovedEvent>.Register(LostEggBinding);
+        }
+
+        private void Start()
+        {
+            GameOverEventBinding = new EventBinding<GameOverEvent>(HandleGameOver);
+
+            Bus<GameOverEvent>.Register(GameOverEventBinding);
         }
 
         private void SetupMinimapClickConfig()
@@ -80,6 +92,22 @@ namespace LlamAcademy.ChickenDefense.UI
             Minimap.RegisterCallback<MouseMoveEvent>(HandleMinimapMouseMove);
             Minimap.RegisterCallback<MouseUpEvent>(HandleMinimapMouseUp);
             Minimap.RegisterCallback<MouseLeaveEvent>(HandleMinimapMouseLeave);
+        }
+
+        private void HandleGameOver(GameOverEvent evt)
+        {
+            foreach (GameObject go in ObjectsToActivateOnPlay)
+            {
+                if (go != null)
+                {
+                    go.SetActive(false);    
+                }
+            }
+            
+            RuntimeUIElement.AddToClassList("disabled");
+
+            EndGameScreen endGameScreen = new(Time.time - StartTime, Difficulty);
+            UI.rootVisualElement.Add(endGameScreen);
         }
 
         private void HandleMinimapMouseDown(MouseDownEvent evt)
@@ -106,7 +134,7 @@ namespace LlamAcademy.ChickenDefense.UI
         {
             MouseDownOnMinimap = false;
         }
-        
+
         private void MoveVirtualCameraTarget(Vector2 mousePosition)
         {
             // convert screen mouse position to "minimap screen" position
@@ -114,9 +142,10 @@ namespace LlamAcademy.ChickenDefense.UI
             float heightMultiplier = (MinimapCamera.scaledPixelHeight / Minimap.layout.width);
             Vector2 convertedMousePosition = new(
                 mousePosition.x * widthMultiplier,
-                (Screen.height - mousePosition.y) * heightMultiplier // mousePosition.y is tied to top left instead of bottom left
+                (Screen.height - mousePosition.y) *
+                heightMultiplier // mousePosition.y is tied to top left instead of bottom left
             );
-            
+
             Ray cameraRay = MinimapCamera.ScreenPointToRay(convertedMousePosition);
             if (Physics.Raycast(cameraRay, out RaycastHit hit, float.MaxValue, FloorLayer))
             {
@@ -130,25 +159,25 @@ namespace LlamAcademy.ChickenDefense.UI
             Resources = new LabeledIcon(ResourceCost.Icon, "0");
             headerContainer.Add(Resources);
 
-            UnitPopulationLabeledIcon labeledIcon = new (ChickenSO, "0");
+            UnitPopulationLabeledIcon labeledIcon = new(ChickenSO, "0");
             PopulationLabeledIcons.Add(labeledIcon);
             headerContainer.Add(labeledIcon);
-            
+
             foreach (UnitSO buildableUnit in BuildableUnits)
             {
                 labeledIcon = new UnitPopulationLabeledIcon(buildableUnit, "0");
-                
+
                 headerContainer.Add(labeledIcon);
                 PopulationLabeledIcons.Add(labeledIcon);
             }
-            
+
             labeledIcon.AddToClassList("padding-right-sm");
         }
-        
+
         private void BuildUnitUI()
         {
             UnitContainer = UI.rootVisualElement.Q("runtime-ui__footer");
-            
+
             Array.Sort(BuildableUnits, (a, b) => Mathf.FloorToInt(a.ResourceCost.Cost - b.ResourceCost.Cost));
             foreach (UnitSO buildableUnit in BuildableUnits)
             {
@@ -165,7 +194,7 @@ namespace LlamAcademy.ChickenDefense.UI
             if (CurrentEggs >= unit.ResourceCost.Cost)
             {
                 Bus<UnitSelectedToPlaceEvent>.Raise(new UnitSelectedToPlaceEvent(unit));
-                Bus<InputModeChangedEvent>.Raise(new InputModeChangedEvent(ActiveInputTarget.Building));                
+                Bus<InputModeChangedEvent>.Raise(new InputModeChangedEvent(ActiveInputTarget.Building));
             }
         }
 
@@ -178,7 +207,7 @@ namespace LlamAcademy.ChickenDefense.UI
                 labeledIcon.Count++;
             }
         }
-        
+
         private void OnUnitDeath(UnitDeathEvent @event)
         {
             UnitPopulationLabeledIcon labeledIcon =
@@ -193,7 +222,7 @@ namespace LlamAcademy.ChickenDefense.UI
         {
             CurrentEggs++;
             Resources.SetText(CurrentEggs.ToString());
-            UpdateBuildableUnitEnabledStatus();            
+            UpdateBuildableUnitEnabledStatus();
         }
 
         private void UpdateBuildableUnitEnabledStatus()
