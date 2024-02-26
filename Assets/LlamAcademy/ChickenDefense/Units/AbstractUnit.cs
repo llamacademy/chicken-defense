@@ -2,7 +2,6 @@ using LlamAcademy.ChickenDefense.EventBus;
 using LlamAcademy.ChickenDefense.Events;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Rendering.Universal;
 
 namespace LlamAcademy.ChickenDefense.Units
 {
@@ -11,7 +10,7 @@ namespace LlamAcademy.ChickenDefense.Units
     {
         public UnitSO Unit;
         
-        [SerializeField] protected DecalProjector SelectionDecal;
+        [SerializeField] protected GameObject SelectionDecal;
 
         public Transform Transform => transform;
 
@@ -87,22 +86,20 @@ namespace LlamAcademy.ChickenDefense.Units
 
         public virtual void Select()
         {
-            SelectionDecal.fadeFactor = 1;
+            SelectionDecal.SetActive(true);
         }
 
         public virtual void Deselect()
         {
-            SelectionDecal.fadeFactor = 0;
+            SelectionDecal.SetActive(false);
         }
 
         public virtual void OnMouseIn()
         {
-            SelectionDecal.fadeFactor = 0.5f;
         }
 
         public virtual void OnMouseOut()
         {
-            SelectionDecal.fadeFactor = 0;
         }
     }
 }

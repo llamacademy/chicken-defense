@@ -6,7 +6,6 @@ namespace LlamAcademy.ChickenDefense.Player
     [System.Serializable]
     public class CameraMoveConfig
     {
-        public float BottomSafePercentage = 0.2f;
         [Header("Edge Panning")]
         public bool EnableEdgePan = true;
         public float MousePanSpeed = 5;

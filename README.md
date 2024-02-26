@@ -22,7 +22,7 @@ Everything should be working from there.
 ## Supporters
 If you got value from this tutorial microgame consider becoming a Donation on Itch, or becoming a [Patreon Supporter](https://patreon.com/llamacademy), joining as a [YouTube Member](https://www.youtube.com/channel/UCnWm6pMD38R1E2vCAByGb6w/join), or even become a [GitHub Sponsor](https://github.com/sponsors/llamacademy) to show your support.
 
-Supporters over the life of this project:
+Active supporters as of the most recent video in this series are shown below.
 
 ## Phenomenal Supporters
 * YOUR NAME HERE!
@@ -32,10 +32,10 @@ Supporters over the life of this project:
 
 ### Awesome Supporter Tier
 * Ivan
-* Reulan
 * Iffy Obelus
 * Perry
 * Mustafa
+* Jerematic
 * YOUR NAME HERE!
 
 ### Supporters
@@ -50,7 +50,6 @@ Supporters over the life of this project:
 * Ewald Schulte
 * Andrew Allbright
 * AudemKay **x2**!
-* Claduiu Barsan-Pipu
 * Ben
 * Christian Van Sttenwijk
 * Strange Swelter
@@ -58,6 +57,9 @@ Supporters over the life of this project:
 * Wendy Whitner
 * Lukas Wolfe
 * YOUR NAME HERE!
+
+## Historical Supporters
+* Anyone who became a supporter during the active period of this microgame or makes a one-time contribution will be shown here.
 
 ## Other Projects
 Interested in other Topics in Unity? 

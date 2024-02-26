@@ -1871,6 +1871,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb3374e2151a4988b768ae63cbb2f23e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InitialDelay: 1
   Camera: {fileID: 1895156702}
   FloorLayers:
     serializedVersion: 2
@@ -27877,7 +27878,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CameraMoveConfig:
-    BottomSafePercentage: 0.1
     EnableEdgePan: 1
     MousePanSpeed: 5
     EdgePanWidth: 50
@@ -27900,7 +27900,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CameraConfig:
-    BottomSafePercentage: 0.1
     EnableEdgePan: 1
     MousePanSpeed: 5
     EdgePanWidth: 50

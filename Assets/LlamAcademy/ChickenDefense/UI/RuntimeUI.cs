@@ -96,6 +96,10 @@ namespace LlamAcademy.ChickenDefense.UI
 
         private void HandleGameOver(GameOverEvent evt)
         {
+            if (UI == null || UI.rootVisualElement == null)
+            {
+                return; // in editor, when quitting this throws a MissingReferenceException due to order of object destruction
+            }
             foreach (GameObject go in ObjectsToActivateOnPlay)
             {
                 if (go != null)

@@ -3,6 +3,7 @@ using System.Linq;
 using LlamAcademy.ChickenDefense.EventBus;
 using LlamAcademy.ChickenDefense.Events;
 using LlamAcademy.ChickenDefense.Units;
+using LlamAcademy.ChickenDefense.Units.Llama.Behaviors;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -53,11 +54,19 @@ namespace LlamAcademy.ChickenDefense.Player
 
         private void OnUnitSpawn(UnitSpawnEvent @event)
         {
-            AliveUnits.Add(@event.Unit);
+            if (@event.Unit is Llama)
+            {
+                AliveUnits.Add(@event.Unit);                
+            }
         }
 
         private void OnUnitDeath(UnitDeathEvent @event)
         {
+            if (!AliveUnits.Contains(@event.Unit))
+            {
+                return;
+            }
+            
             AliveUnits.Remove(@event.Unit);
             SelectedUnits.Remove(@event.Unit);
         }
@@ -72,14 +81,8 @@ namespace LlamAcademy.ChickenDefense.Player
             HandleIssuingCommands(cameraRay);
         }
 
-        private bool IsMouseWithinSafeZone(Vector2 mousePosition)
-        {
-            return mousePosition.y < Screen.height * CameraConfig.BottomSafePercentage;
-        }
-        
         private void HandleDragSelect(Ray cameraRay, Vector2 mousePosition)
         {
-            bool mouseIsInSafeZone = IsMouseWithinSafeZone(mousePosition);
             if (Mouse.current.leftButton.wasPressedThisFrame && !EventSystem.current.IsPointerOverGameObject())
             {
                 SelectionBox.gameObject.SetActive(true);
@@ -116,6 +119,11 @@ namespace LlamAcademy.ChickenDefense.Player
             }
             else if (Mouse.current.leftButton.wasReleasedThisFrame)
             {
+                if (EventSystem.current.IsPointerOverGameObject() && !SelectionBox.gameObject.activeSelf)
+                {
+                    return;
+                }
+                
                 SelectionBox.gameObject.SetActive(false);
                 if (MouseDownTime + MouseDragDelay > Time.time || AddedUnits.Count == 0 && !EventSystem.current.IsPointerOverGameObject())
                 {
