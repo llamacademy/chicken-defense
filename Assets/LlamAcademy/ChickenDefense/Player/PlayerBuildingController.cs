@@ -18,7 +18,7 @@ namespace LlamAcademy.ChickenDefense.Player
         [SerializeField] private Rigidbody VirtualCameraTarget;
         [SerializeField] private LayerMask PlacementLayers;
         [SerializeField] private Camera Camera;
-        
+
         private GameObject PlacementGhost;
         private UnitSO ActiveUnit;
 
@@ -29,7 +29,9 @@ namespace LlamAcademy.ChickenDefense.Player
 
         private NavMeshQueryFilter QueryFilter;
         private static readonly int COLOR_PROPERTY = Shader.PropertyToID("_Tint");
+        private static readonly int FRESNEL_COLOR_PROPERTY = Shader.PropertyToID("_FresnelColor");
         private static readonly Color BASE_COLOR = new(0.407f, 0.741f, 0.988f, 0.466f);
+        private static readonly Color FRESNEL_COLOR = new(0.67f, 0.875f, 0.996f, 1);
 
         private void Awake()
         {
@@ -76,11 +78,12 @@ namespace LlamAcademy.ChickenDefense.Player
                     out RaycastHit hit,
                     float.MaxValue,
                     PlacementLayers) &&
-                NavMesh.SamplePosition(hit.point, out NavMeshHit navMeshHit, 0.25f, QueryFilter))
+                NavMesh.SamplePosition(hit.point, out NavMeshHit _, 0.25f, QueryFilter))
             {
                 foreach (Renderer renderer in PlacementGhost.GetComponentsInChildren<Renderer>())
                 {
                     renderer.material.SetColor(COLOR_PROPERTY, BASE_COLOR);
+                    renderer.material.SetColor(FRESNEL_COLOR_PROPERTY, FRESNEL_COLOR);
                 }
             }
             else
@@ -88,6 +91,7 @@ namespace LlamAcademy.ChickenDefense.Player
                 foreach (Renderer renderer in PlacementGhost.GetComponentsInChildren<Renderer>())
                 {
                     renderer.material.SetColor(COLOR_PROPERTY, Color.red);
+                    renderer.material.SetColor(FRESNEL_COLOR_PROPERTY, Color.red);
                 }
             }
 
