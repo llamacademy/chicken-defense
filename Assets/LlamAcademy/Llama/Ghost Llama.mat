@@ -102,17 +102,17 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _LineCount: 25
-    - _LineFrequency: 25
-    - _LineRotation: 122
-    - _LineStrength: 0.076
-    - _LineThickness: 0.26
+    - _LineFrequency: 75
+    - _LineRotation: 90
+    - _LineStrength: 0.25
+    - _LineThickness: 0.17
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _ScrollSpeed: -1
+    - _ScrollSpeed: -2
     - _Smoothness: 0.085
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -127,9 +127,9 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FresnelColor: {r: 0.14453526, g: 1.0469357, b: 1.5849056, a: 1}
+    - _FresnelColor: {r: 0.09224285, g: 0.99088776, b: 2.666666, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _Tint: {r: 0.17226359, g: 0.54290193, b: 0.81761, a: 0.46666667}
+    - _Tint: {r: 0.40784314, g: 0.7411765, b: 0.9882353, a: 0.5647059}
   m_BuildTextureStacks: []
 --- !u!114 &1246054708659539245
 MonoBehaviour:

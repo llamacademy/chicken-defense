@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using LlamAcademy.ChickenDefense.Behaviors;
 using LlamAcademy.ChickenDefense.EventBus;
 using LlamAcademy.ChickenDefense.Events;
@@ -23,10 +24,9 @@ namespace LlamAcademy.ChickenDefense.AI
         [SerializeField] [Range(5, 20)] private int InitialEggs = 5;
         private ObjectPool<Chicken> ChickenPool;
 
-        private int AliveChickens;
+        private bool RegisteredEvents;
 
-        private EventBinding<UnitSpawnEvent> UnitSpawnEventBinding;
-        private EventBinding<UnitDeathEvent> UnitDeathEventBinding;
+        private int AliveChickens;
 
         private void OnUnitSpawn(UnitSpawnEvent @event)
         {
@@ -56,7 +56,7 @@ namespace LlamAcademy.ChickenDefense.AI
             {
                 egg.gameObject.SetActive(false);
             }
-            
+
             for (int i = 0; i < InitialEggs; i++)
             {
                 SpawnEgg();
@@ -80,16 +80,22 @@ namespace LlamAcademy.ChickenDefense.AI
 
         private void SetupEventBindings()
         {
-            UnitSpawnEventBinding = new EventBinding<UnitSpawnEvent>(OnUnitSpawn);
-            UnitDeathEventBinding = new EventBinding<UnitDeathEvent>(OnUnitDeath);
-            Bus<UnitSpawnEvent>.Register(UnitSpawnEventBinding);
-            Bus<UnitDeathEvent>.Register(UnitDeathEventBinding);
+            Bus<UnitSpawnEvent>.OnEvent += OnUnitSpawn;
+            Bus<UnitDeathEvent>.OnEvent += OnUnitDeath;
+            RegisteredEvents = true;
+        }
+
+        private void OnDisable()
+        {
+            Bus<UnitSpawnEvent>.OnEvent -= OnUnitSpawn;
+            Bus<UnitDeathEvent>.OnEvent -= OnUnitDeath;
+            RegisteredEvents = false;
         }
 
         public void SpawnChicken()
         {
             ChickenPool ??= new ObjectPool<Chicken>(() => Instantiate(Chicken.Prefab).GetComponent<Chicken>());
-            if (UnitSpawnEventBinding == null)
+            if (!RegisteredEvents)
             {
                 SetupEventBindings();
             }

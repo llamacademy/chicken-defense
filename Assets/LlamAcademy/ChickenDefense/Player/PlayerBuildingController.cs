@@ -22,9 +22,6 @@ namespace LlamAcademy.ChickenDefense.Player
         private GameObject PlacementGhost;
         private UnitSO ActiveUnit;
 
-        private EventBinding<UnitSelectedToPlaceEvent> UnitSelectedEventBinding;
-        private EventBinding<EggSpawnEvent> EggSpawnEventBinding;
-        private EventBinding<EggRemovedEvent> EggRemovedEventBinding;
         private List<Egg> Eggs = new();
 
         private NavMeshQueryFilter QueryFilter;
@@ -33,15 +30,18 @@ namespace LlamAcademy.ChickenDefense.Player
         private static readonly Color BASE_COLOR = new(0.407f, 0.741f, 0.988f, 0.466f);
         private static readonly Color FRESNEL_COLOR = new(0.67f, 0.875f, 0.996f, 1);
 
-        private void Awake()
+        private void OnEnable()
         {
-            UnitSelectedEventBinding = new EventBinding<UnitSelectedToPlaceEvent>(HandleUnitSelected);
-            Bus<UnitSelectedToPlaceEvent>.Register(UnitSelectedEventBinding);
+            Bus<UnitSelectedToPlaceEvent>.OnEvent += HandleUnitSelected;
+            Bus<EggSpawnEvent>.OnEvent += HandleEggSpawn;
+            Bus<EggRemovedEvent>.OnEvent += HandleEggRemoved;
+        }
 
-            EggSpawnEventBinding = new EventBinding<EggSpawnEvent>(HandleEggSpawn);
-            EggRemovedEventBinding = new EventBinding<EggRemovedEvent>(HandleEggRemoved);
-            Bus<EggSpawnEvent>.Register(EggSpawnEventBinding);
-            Bus<EggRemovedEvent>.Register(EggRemovedEventBinding);
+        private void OnDisable()
+        {
+            Bus<UnitSelectedToPlaceEvent>.OnEvent -= HandleUnitSelected;
+            Bus<EggSpawnEvent>.OnEvent -= HandleEggSpawn;
+            Bus<EggRemovedEvent>.OnEvent -= HandleEggRemoved;
         }
 
         private void Update()

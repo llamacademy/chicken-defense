@@ -26,17 +26,11 @@ namespace LlamAcademy.ChickenDefense.AI
         [SerializeField] private UnitSO Fox;
         private int NumberAliveEggs;
 
-        private EventBinding<EggRemovedEvent> EggRemovedBinding;
-        private EventBinding<EggSpawnEvent> EggSpawnedBinding;
-        private EventBinding<UnitSpawnEvent> SpawnedUnitBinding;
-        private EventBinding<UnitDeathEvent> UnitDeathBinding;
-        private EventBinding<DifficultyChangedEvent> DifficultyChangedBinding;
-
         private List<Snake> AliveSnakes = new();
         private List<Fox> AliveFoxes = new();
         private List<Egg> AliveEggs = new();
         private List<Chicken> AliveChickens = new();
-        
+
         private ObjectPool<Snake> SnakePool;
         private ObjectPool<Fox> FoxPool;
 
@@ -67,22 +61,28 @@ namespace LlamAcademy.ChickenDefense.AI
 
         private void Awake()
         {
-            EggRemovedBinding = new EventBinding<EggRemovedEvent>(HandleLoseEgg);
-            EggSpawnedBinding = new EventBinding<EggSpawnEvent>(HandleSpawnEgg);
-            Bus<EggRemovedEvent>.Register(EggRemovedBinding);
-            Bus<EggSpawnEvent>.Register(EggSpawnedBinding);
-
-            SpawnedUnitBinding = new EventBinding<UnitSpawnEvent>(HandleUnitSpawn);
-            UnitDeathBinding = new EventBinding<UnitDeathEvent>(HandleUnitDeath);
-            Bus<UnitSpawnEvent>.Register(SpawnedUnitBinding);
-            Bus<UnitDeathEvent>.Register(UnitDeathBinding);
-
             SnakePool = new ObjectPool<Snake>(() => Instantiate(Snake.Prefab).GetComponent<Snake>());
             FoxPool = new ObjectPool<Fox>(() => Instantiate(Fox.Prefab).GetComponent<Fox>());
 
-            DifficultyChangedBinding = new EventBinding<DifficultyChangedEvent>((evt) => DifficultyFactor = (int)evt.Difficulty);
-            Bus<DifficultyChangedEvent>.Register(DifficultyChangedBinding);
+            Bus<EggRemovedEvent>.OnEvent += HandleLoseEgg;
+            Bus<EggSpawnEvent>.OnEvent += HandleSpawnEgg;
+
+            Bus<UnitSpawnEvent>.OnEvent += HandleUnitSpawn;
+            Bus<UnitDeathEvent>.OnEvent += HandleUnitDeath;
+            Bus<DifficultyChangedEvent>.OnEvent += HandleDifficultyChanged;
+
             gameObject.SetActive(false);
+        }
+
+
+        private void OnDestroy()
+        {
+            Bus<EggRemovedEvent>.OnEvent -= HandleLoseEgg;
+            Bus<EggSpawnEvent>.OnEvent -= HandleSpawnEgg;
+
+            Bus<UnitSpawnEvent>.OnEvent -= HandleUnitSpawn;
+            Bus<UnitDeathEvent>.OnEvent -= HandleUnitDeath;
+            Bus<DifficultyChangedEvent>.OnEvent -= HandleDifficultyChanged;
         }
 
         private void Start()
@@ -207,6 +207,11 @@ namespace LlamAcademy.ChickenDefense.AI
             }
         }
 
+        private void HandleDifficultyChanged(DifficultyChangedEvent evt)
+        {
+            DifficultyFactor = (int)evt.Difficulty;
+        }
+
         private void HandleUnitSpawn(UnitSpawnEvent @event)
         {
             switch (@event.Unit)
@@ -219,16 +224,16 @@ namespace LlamAcademy.ChickenDefense.AI
                     break;
                 case Chicken chicken:
                     AliveChickens.Add(chicken);
-                    
+
                     foreach (Fox fox in AliveFoxes.Where(fox => fox.TransformTarget == null))
                     {
                         fox.Follow(AliveChickens[Random.Range(0, AliveChickens.Count)].transform);
                     }
-                    
+
                     break;
             }
         }
-        
+
         private void HandleLoseEgg(EggRemovedEvent @event)
         {
             NumberAliveEggs -= @event.Eggs.Length;

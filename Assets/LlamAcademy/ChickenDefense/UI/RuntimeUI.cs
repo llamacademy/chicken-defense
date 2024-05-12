@@ -23,6 +23,7 @@ namespace LlamAcademy.ChickenDefense.UI
         [SerializeField] private ResourceCostSO ResourceCost;
         [SerializeField] private UnitSO ChickenSO;
         [SerializeField] private UnitSO[] BuildableUnits;
+
         private UIDocument UI;
         private VisualElement Footer;
         private LabeledIcon Resources;
@@ -35,12 +36,6 @@ namespace LlamAcademy.ChickenDefense.UI
         private int CurrentEggs;
         private bool MouseDownOnMinimap;
         private LayerMask FloorLayer;
-
-        private EventBinding<UnitSpawnEvent> SpawnEventBinding;
-        private EventBinding<UnitDeathEvent> DieEventBinding;
-        private EventBinding<EggSpawnEvent> EggSpawnBinding;
-        private EventBinding<EggRemovedEvent> LostEggBinding;
-        private EventBinding<GameOverEvent> GameOverEventBinding;
 
         private float StartTime;
         private Difficulty Difficulty;
@@ -66,22 +61,28 @@ namespace LlamAcademy.ChickenDefense.UI
             SetupMinimapClickConfig();
             BuildUnitUI();
             BuildPopulationAndResourceUI();
-            
-            SpawnEventBinding = new EventBinding<UnitSpawnEvent>(OnSpawnUnit);
-            DieEventBinding = new EventBinding<UnitDeathEvent>(OnUnitDeath);
-            EggSpawnBinding = new EventBinding<EggSpawnEvent>(OnSpawnEgg);
-            LostEggBinding = new EventBinding<EggRemovedEvent>(OnLoseEgg);
-            Bus<UnitSpawnEvent>.Register(SpawnEventBinding);
-            Bus<UnitDeathEvent>.Register(DieEventBinding);
-            Bus<EggSpawnEvent>.Register(EggSpawnBinding);
-            Bus<EggRemovedEvent>.Register(LostEggBinding);
+        }
+
+        private void OnEnable()
+        {
+            Bus<UnitSpawnEvent>.OnEvent += OnSpawnUnit;
+            Bus<UnitDeathEvent>.OnEvent += OnUnitDeath;
+            Bus<EggSpawnEvent>.OnEvent += OnSpawnEgg;
+            Bus<EggRemovedEvent>.OnEvent += OnLoseEgg;
         }
 
         private void Start()
         {
-            GameOverEventBinding = new EventBinding<GameOverEvent>(HandleGameOver);
+            Bus<GameOverEvent>.OnEvent += HandleGameOver;
+        }
 
-            Bus<GameOverEvent>.Register(GameOverEventBinding);
+        private void OnDisable()
+        {
+            Bus<UnitSpawnEvent>.OnEvent -= OnSpawnUnit;
+            Bus<UnitDeathEvent>.OnEvent -= OnUnitDeath;
+            Bus<EggSpawnEvent>.OnEvent -= OnSpawnEgg;
+            Bus<EggRemovedEvent>.OnEvent -= OnLoseEgg;
+            Bus<GameOverEvent>.OnEvent -= HandleGameOver;
         }
 
         private void SetupMinimapClickConfig()
@@ -104,10 +105,10 @@ namespace LlamAcademy.ChickenDefense.UI
             {
                 if (go != null)
                 {
-                    go.SetActive(false);    
+                    go.SetActive(false);
                 }
             }
-            
+
             RuntimeUIElement.AddToClassList("disabled");
 
             EndGameScreen endGameScreen = new(Time.time - StartTime, Difficulty);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LlamAcademy.ChickenDefense.EventBus;
@@ -13,7 +14,7 @@ namespace LlamAcademy.ChickenDefense.Player
     [DefaultExecutionOrder(1)]
     public class PlayerController : MonoBehaviour
     {
-        [Header("Camera Configuration")] 
+        [Header("Camera Configuration")]
         [SerializeField] private CameraMoveConfig CameraConfig = new();
 
         [SerializeField] private Rigidbody VirtualCameraTarget;
@@ -21,8 +22,8 @@ namespace LlamAcademy.ChickenDefense.Player
         [SerializeField] private float MouseDragDelay = 0.1f;
 
         [Space] [SerializeField] private Renderer ClickIcon;
-        
-        [Header("Layers")] 
+
+        [Header("Layers")]
         [SerializeField] private LayerMask SelectableLayers;
         [SerializeField] private LayerMask CommandTargetLayers;
 
@@ -37,26 +38,31 @@ namespace LlamAcademy.ChickenDefense.Player
         private HashSet<AbstractUnit> AddedUnits = new(12);
         private HashSet<AbstractUnit> RemovedUnits = new(12);
 
-        private EventBinding<UnitSpawnEvent> UnitSpawnEventBinding;
-        private EventBinding<UnitDeathEvent> UnitDeathEventBinding;
         private static readonly int CLICK_TIME_PROPERTY = Shader.PropertyToID("_ClickTime");
 
         private void Awake()
         {
-            UnitSpawnEventBinding = new EventBinding<UnitSpawnEvent>(OnUnitSpawn);
-            UnitDeathEventBinding = new EventBinding<UnitDeathEvent>(OnUnitDeath);
-            Bus<UnitSpawnEvent>.Register(UnitSpawnEventBinding);
-            Bus<UnitDeathEvent>.Register(UnitDeathEventBinding);
-
             VirtualCameraTarget.maxLinearVelocity =
                 Mathf.Max(CameraConfig.KeyboardPanSpeed, CameraConfig.MousePanSpeed);
+        }
+
+        private void OnEnable()
+        {
+            Bus<UnitSpawnEvent>.OnEvent += OnUnitSpawn;
+            Bus<UnitDeathEvent>.OnEvent += OnUnitDeath;
+        }
+
+        private void OnDisable()
+        {
+            Bus<UnitSpawnEvent>.OnEvent -= OnUnitSpawn;
+            Bus<UnitDeathEvent>.OnEvent -= OnUnitDeath;
         }
 
         private void OnUnitSpawn(UnitSpawnEvent @event)
         {
             if (@event.Unit is Llama)
             {
-                AliveUnits.Add(@event.Unit);                
+                AliveUnits.Add(@event.Unit);
             }
         }
 
@@ -66,7 +72,7 @@ namespace LlamAcademy.ChickenDefense.Player
             {
                 return;
             }
-            
+
             AliveUnits.Remove(@event.Unit);
             SelectedUnits.Remove(@event.Unit);
         }
@@ -123,13 +129,13 @@ namespace LlamAcademy.ChickenDefense.Player
                 {
                     return;
                 }
-                
+
                 SelectionBox.gameObject.SetActive(false);
                 if (MouseDownTime + MouseDragDelay > Time.time || AddedUnits.Count == 0 && !EventSystem.current.IsPointerOverGameObject())
                 {
                     HandleLeftClick(cameraRay);
                 }
-                else 
+                else
                 {
                     foreach (AbstractUnit unit in AddedUnits)
                     {
@@ -155,7 +161,7 @@ namespace LlamAcademy.ChickenDefense.Player
                 }
             }
         }
-        
+
         private void HandleLeftClick(Ray cameraRay)
         {
             if (Physics.Raycast(
@@ -179,7 +185,7 @@ namespace LlamAcademy.ChickenDefense.Player
                 DeselectAllUnits(SelectedUnits);
             }
         }
-        
+
         private void DeselectAllUnits(HashSet<AbstractUnit> unitsToDeselect)
         {
             foreach (AbstractUnit selectable in unitsToDeselect)
@@ -222,7 +228,7 @@ namespace LlamAcademy.ChickenDefense.Player
                     }
                     else
                     {
-                        unit.MoveTo(hit.point);    
+                        unit.MoveTo(hit.point);
                     }
                 }
             }

@@ -31,3 +31,4 @@ Please do not commit and create PRs with your implementation of these challenges
 - Create a procedural jump animation for the Fox jumping over the fence
 - Consider the design challenges with using the same base class for Enemies and Llamas. Reimplement them using different base classes.
 - Add the ability for enemies to attack Llamas instead of only run away. This most likely requires significant rebalanacing.
+- Replace Static EventBus with ScriptableObject event channels that can be configured in the Editor instead of only in code.

@@ -8,12 +8,6 @@ namespace LlamAcademy.ChickenDefense.Player
     {
         [SerializeField] private InputHandler[] InputHandlers;
         [SerializeField] private ActiveInputTarget DefaultTarget = ActiveInputTarget.Units;
-        private EventBinding<InputModeChangedEvent> ChangeEvent;
-
-        private void Awake()
-        {
-            ChangeEvent = new EventBinding<InputModeChangedEvent>(HandleInputModeChanged);
-        }
 
         private void Start()
         {
@@ -22,12 +16,12 @@ namespace LlamAcademy.ChickenDefense.Player
 
         private void OnEnable()
         {
-            Bus<InputModeChangedEvent>.Register(ChangeEvent);
+            Bus<InputModeChangedEvent>.OnEvent += HandleInputModeChanged;
         }
 
         private void OnDisable()
         {
-            Bus<InputModeChangedEvent>.Unregister(ChangeEvent);
+            Bus<InputModeChangedEvent>.OnEvent -= HandleInputModeChanged;
         }
 
         private void HandleInputModeChanged(InputModeChangedEvent @event)

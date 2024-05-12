@@ -35,8 +35,18 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.Behaviors
             AddAttackStates();
             AddAttackTransitions();
             base.Awake();
-            
-            Bus<UnitDeathEvent>.Register(new EventBinding<UnitDeathEvent>(HandleEnemyDeath));
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            Bus<UnitDeathEvent>.OnEvent += HandleEnemyDeath;
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            Bus<UnitDeathEvent>.OnEvent -= HandleEnemyDeath;
         }
 
         private void Start()
@@ -88,7 +98,7 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.Behaviors
         {
             FSM.AddState(LlamaStates.Idle, new IdleState<LlamaStates>(this));
             FSM.AddState(LlamaStates.Move, new MoveState<LlamaStates>(this));
-            FSM.AddState(LlamaStates.Attack, AttackStateMachine); 
+            FSM.AddState(LlamaStates.Attack, AttackStateMachine);
 
             FSM.SetStartState(LlamaStates.Idle);
         }
@@ -144,7 +154,7 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.Behaviors
             if (target.TryGetComponent(out IDamageable damageable) && Agent.CalculatePath(target.position, new NavMeshPath()))
             {
                 NearbyEnemies.Add(damageable);
-                
+
                 // Pick the closest one
                 NearbyEnemies.Sort((a, b) =>
                     Vector3.SqrMagnitude(a.Transform.position - transform.position)
@@ -190,7 +200,7 @@ namespace LlamAcademy.ChickenDefense.Units.Llama.Behaviors
         {
             TransformTarget = NearbyEnemies[0].Transform;
         }
-        
+
         private bool IsCloseToTarget(Transition<LlamaStates> _) =>
             Agent.enabled && Agent.remainingDistance <= Agent.stoppingDistance;
 
