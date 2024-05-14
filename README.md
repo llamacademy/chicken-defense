@@ -33,17 +33,13 @@ Active supporters as of the most recent video in this series are shown below.
 ### Awesome Supporter Tier
 * Ivan
 * Iffy Obelus
-* Perry
 * Mustafa
-* Jerematic
 * YOUR NAME HERE!
 
 ### Supporters
 * Trey Briggs
 * Matt Sponholz
-* Dr Bash
 * Tarik
-* Sean
 * Elijah Singer
 * Bruno Bozic
 * Josh Meyer
@@ -56,10 +52,15 @@ Active supporters as of the most recent video in this series are shown below.
 * Chimera Dev
 * Wendy Whitner
 * Lukas Wolfe
+* Jason Hansen
 * YOUR NAME HERE!
 
 ## Historical Supporters
 * Anyone who became a supporter during the active period of this microgame or makes a one-time contribution will be shown here.
+* Perry (Awesome Supporter)
+* Jerematic (Awesome Supporter)
+* Sean (Supporter)
+* Dr Bash (Supporter)
 
 ## Other Projects
 Interested in other Topics in Unity? 
