@@ -6,6 +6,8 @@ Chickens will automatically spawn periodically. Obviously, chickens lay eggs. Us
 
 This microgame was created as a means to show and teach how different aspects of a game can be created. See the [Challenges](./Challenges.md) for some challenges to test your understanding!
 
+You can find tutorials covering the majority of this repository on this [YouTube Playlist](https://www.youtube.com/watch?v=1wHXuPVJvDo&list=PLllNmP7eq6TRXItEcn9gEjZQkSTFVkvuE)
+
 ## Important Notes
 Most **ART** Assets here are NOT licensed under the MIT license as the rest of the project is. Please carefully review the LICESE file in any sub-folder for and overriding license for that particular asset.
 
@@ -22,7 +24,7 @@ Everything should be working from there.
 ## Supporters
 If you got value from this tutorial microgame consider becoming a Donation on Itch, or becoming a [Patreon Supporter](https://patreon.com/llamacademy), joining as a [YouTube Member](https://www.youtube.com/channel/UCnWm6pMD38R1E2vCAByGb6w/join), or even become a [GitHub Sponsor](https://github.com/sponsors/llamacademy) to show your support.
 
-Active supporters as of the most recent video in this series are shown below.
+Supporters during the active lifespan of the microgame tutorial creation are shown below. Thank you all 🧡!
 
 ## Phenomenal Supporters
 * YOUR NAME HERE!
@@ -33,13 +35,16 @@ Active supporters as of the most recent video in this series are shown below.
 ### Awesome Supporter Tier
 * Ivan
 * Iffy Obelus
+* Perry
 * Mustafa
 * YOUR NAME HERE!
 
 ### Supporters
 * Trey Briggs
 * Matt Sponholz
+* Dr Bash
 * Tarik
+* Sean
 * Elijah Singer
 * Bruno Bozic
 * Josh Meyer
@@ -55,15 +60,8 @@ Active supporters as of the most recent video in this series are shown below.
 * Jason Hansen
 * YOUR NAME HERE!
 
-## Historical Supporters
-* Anyone who became a supporter during the active period of this microgame or makes a one-time contribution will be shown here.
-* Perry (Awesome Supporter)
-* Jerematic (Awesome Supporter)
-* Sean (Supporter)
-* Dr Bash (Supporter)
-
 ## Other Projects
-Interested in other Topics in Unity? 
+Interested in other Topics in Unity?
 
 * [Check out the LlamAcademy YouTube Channel](https://youtube.com/c/LlamAcademy)!
 * [Check out the LlamAcademy GitHub for more projects](https://github.com/llamacademy)
@@ -72,6 +70,3 @@ Interested in other Topics in Unity?
 * Requires Unity 2022.3 LTS or higher.
 * Universal Render Pipeline
 * Unity Particle Pack
-
-## Disclaimers
-Some links in this readme may contain affiliate links which, at the time of purchase, at no additional cost to you, gives me a small portion of the purchase.
