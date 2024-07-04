@@ -9,9 +9,9 @@ This microgame was created as a means to show and teach how different aspects of
 You can find tutorials covering the majority of this repository on this [YouTube Playlist](https://www.youtube.com/watch?v=1wHXuPVJvDo&list=PLllNmP7eq6TRXItEcn9gEjZQkSTFVkvuE)
 
 ## Important Notes
-Most **ART** Assets here are NOT licensed under the MIT license as the rest of the project is. Please carefully review the LICESE file in any sub-folder for and overriding license for that particular asset.
+Most **ART** Assets here are NOT licensed under the MIT license as the rest of the project is. Please carefully review the LICENSE file in any sub-folder for and overriding license for that particular asset.
 
-Notably, the Llama model **cannot** be used in any published game or work. All rights there are reserved by LlamAcademy.
+Notably, the Llama model **cannot** be used in any published game or work. All rights there are reserved by LlamAcademy. Special thanks to [Chris Burns](https://www.youtube.com/@ChrisBurns3D) for the awesome llama!
 
 The majority of other assets came from [OpenGameArt](https://opengameart.org) and _most_ are CC0 licensed.
 
