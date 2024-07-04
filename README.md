@@ -58,6 +58,8 @@ Supporters during the active lifespan of the microgame tutorial creation are sho
 * Wendy Whitner
 * Lukas Wolfe
 * Jason Hansen
+* Ben Sparks
+* Angell
 * YOUR NAME HERE!
 
 ## Other Projects
